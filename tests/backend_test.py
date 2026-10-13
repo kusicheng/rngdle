@@ -5,11 +5,16 @@ create disposable accounts and clean them up; they refuse nonlocal hosts.
 """
 
 import http.cookiejar
+from contextlib import closing
 import ipaddress
 import json
 import os
 from pathlib import Path
 import re
+import shutil
+import sqlite3
+import subprocess
+import tempfile
 import unittest
 import urllib.error
 import urllib.parse
@@ -116,11 +121,12 @@ class BackendTests(unittest.TestCase):
         self.assertEqual(400, status)
         self.assertIsNone(self.client.state()["today"])
 
-    def test_roll_is_server_generated_and_persistent_once_per_day(self):
-        self.assert_success(self.client.request("roll", {
+    def test_guest_rolls_are_unlimited_server_generated_and_save_latest(self):
+        result = self.assert_success(self.client.request("roll", {
             "number": -1, "value": -1, "score": 10**30,
             "day": "2099-01-01", "badges": ["fake-client-badge"],
         }))
+        self.assertFalse(result["alreadyRolled"])
         first = self.client.state()
         self.assertIsNotNone(first["today"])
         number = first["today"]["value"]
@@ -131,11 +137,70 @@ class BackendTests(unittest.TestCase):
         self.assertEqual(1, len(first["history"]))
         self.assertNotIn("fake-client-badge", [badge["id"] for badge in first["today"]["badges"]])
         self.assertNotEqual(10**30, first["today"]["ep"])
-        status, _ = self.client.request("roll", {})
-        self.assertIn(status, (200, 409))
-        again = self.client.state()
-        self.assertEqual(first["today"], again["today"])
-        self.assertEqual(first["history"], again["history"])
+        self.assertEqual(first["today"], self.client.state()["today"],
+                         "Reload must preserve the latest guest roll")
+        ids = {first["today"]["id"]}
+        for _ in range(8):
+            result = self.assert_success(self.client.request("roll", {}))
+            self.assertFalse(result["alreadyRolled"])
+            roll = result["roll"]
+            self.assertNotIn(roll["id"], ids)
+            ids.add(roll["id"])
+            self.assertGreaterEqual(roll["value"], 0)
+            self.assertLessEqual(roll["value"], 1_000_000)
+            self.assertEqual(first["day"], roll["day"])
+            self.assertEqual(roll, result["state"]["today"])
+            self.assertEqual([roll], result["state"]["history"],
+                             "Guest rerolls save only the latest result per day")
+            self.assertEqual(roll["ep"], result["state"]["stats"]["totalEP"])
+
+    def test_signed_in_rolls_are_once_per_account_day_across_devices(self):
+        suffix = uuid.uuid4().hex[:12]
+        email = f"once-{suffix}@example.test"
+        password = "Test-password-" + suffix
+        registered = False
+        try:
+            self.assert_success(self.client.request("register", {
+                "username": "once" + suffix, "email": email, "password": password,
+            }))
+            registered = True
+            self.assertIsNone(self.client.state()["today"])
+            first = self.assert_success(self.client.request("roll", {}))
+            self.assertFalse(first["alreadyRolled"])
+            for _ in range(3):
+                again = self.assert_success(self.client.request("roll", {}))
+                self.assertTrue(again["alreadyRolled"])
+                self.assertEqual(first["roll"], again["roll"])
+                self.assertEqual(first["state"]["history"], again["state"]["history"])
+                self.assertEqual(first["state"]["stats"], again["state"]["stats"])
+            second_device = Client()
+            second_device.state()
+            self.assert_success(second_device.request("login", {
+                "identity": email, "password": password,
+            }))
+            again = self.assert_success(second_device.request("roll", {}))
+            self.assertTrue(again["alreadyRolled"])
+            self.assertEqual(first["roll"], again["roll"])
+            self.assert_success(second_device.request("logout", {}))
+            guest = second_device.state()
+            self.assertIsNone(guest["today"])
+            self.assertEqual([], guest["history"],
+                             "Signing out must not expose the account's rolls")
+            guest_roll = self.assert_success(second_device.request("roll", {}))
+            self.assertFalse(guest_roll["alreadyRolled"])
+            self.assertNotEqual(first["roll"]["id"], guest_roll["roll"]["id"])
+            self.assert_success(second_device.request("login", {
+                "identity": email, "password": password,
+            }))
+            signed_again = self.assert_success(second_device.request("roll", {}))
+            self.assertTrue(signed_again["alreadyRolled"])
+            self.assertEqual(first["roll"], signed_again["roll"])
+            self.assertEqual(first["state"]["stats"], signed_again["state"]["stats"])
+        finally:
+            if registered:
+                self.assert_success(self.client.request("deleteAccount", {
+                    "password": password,
+                }))
 
     def test_poem_ownership_length_and_persistence(self):
         self.assert_success(self.client.request("roll", {}))
@@ -165,9 +230,13 @@ class BackendTests(unittest.TestCase):
         new_password = "Changed-password-" + suffix
         registered = False
         current_password = password
+        last_guest_roll = None
         try:
             self.assert_success(self.client.request("roll", {}))
+            first_guest_roll = self.client.state()["today"]
+            self.assert_success(self.client.request("roll", {}))
             guest_roll = self.client.state()["today"]
+            self.assertNotEqual(first_guest_roll["id"], guest_roll["id"])
             self.assert_success(self.client.request("register", {
                 "username": username, "email": email, "password": password,
             }))
@@ -178,6 +247,10 @@ class BackendTests(unittest.TestCase):
                 self.assertNotIn(secret, account["user"])
             self.assertEqual(guest_roll, account["today"])
             self.assertEqual(1, len(account["history"]))
+            self.assertEqual(guest_roll["ep"], account["stats"]["totalEP"])
+            repeat = self.assert_success(self.client.request("roll", {}))
+            self.assertTrue(repeat["alreadyRolled"])
+            self.assertEqual(guest_roll, repeat["roll"])
             duplicate = Client()
             duplicate.state()
             status, _ = duplicate.request("register", {
@@ -227,8 +300,13 @@ class BackendTests(unittest.TestCase):
                               "Password change must invalidate other sessions")
             self.assert_success(self.client.request("logout", {}))
             self.assertIsNone(self.client.state()["user"])
-            self.assertEqual(guest_roll["value"], self.client.state()["today"]["value"])
-            self.assert_success(self.client.request("roll", {}))
+            self.assertIsNone(self.client.state()["today"])
+            self.assertEqual([], self.client.state()["history"])
+            for _ in range(3):
+                reroll = self.assert_success(self.client.request("roll", {}))
+                self.assertFalse(reroll["alreadyRolled"])
+                self.assertNotEqual(guest_roll["id"], reroll["roll"]["id"])
+                last_guest_roll = reroll["roll"]
             self.assertEqual(1, len(self.client.state()["history"]))
             status, _ = self.client.request("login", {
                 "identity": email, "password": password,
@@ -241,6 +319,11 @@ class BackendTests(unittest.TestCase):
             self.assertEqual(renamed, signed_in["user"]["username"])
             self.assertEqual(guest_roll, signed_in["today"])
             self.assertEqual(1, len(signed_in["history"]))
+            self.assertEqual(account["stats"], signed_in["stats"],
+                             "Logging in after guest rerolls must not add account EP")
+            repeat = self.assert_success(self.client.request("roll", {}))
+            self.assertTrue(repeat["alreadyRolled"])
+            self.assertEqual(guest_roll, repeat["roll"])
             if mail_log:
                 self.assert_success(self.client.request("requestPasswordReset", {"email": email}))
                 message = Path(mail_log).read_text(encoding="utf-8")
@@ -274,14 +357,105 @@ class BackendTests(unittest.TestCase):
                 }))
                 deleted = self.client.state()
                 self.assertIsNone(deleted["user"])
-                self.assertEqual([], deleted["history"], "Deleted account history must be inaccessible")
-                self.assertEqual(0, deleted["stats"]["rolls"])
-                self.assertEqual(guest_roll["id"], deleted["today"]["id"])
-                self.assert_success(self.client.request("roll", {}))
-                locked = self.client.state()
-                self.assertEqual(guest_roll["id"], locked["today"]["id"],
-                                 "Deleting an account must not permit another roll today")
-                self.assertEqual([], locked["history"])
+                self.assertNotIn(guest_roll["id"], [r["id"] for r in deleted["history"]],
+                                 "Deleted account history must be inaccessible")
+                self.assertEqual([last_guest_roll] if last_guest_roll else [], deleted["history"])
+                reroll = self.assert_success(self.client.request("roll", {}))
+                self.assertFalse(reroll["alreadyRolled"])
+                self.assertNotEqual(guest_roll["id"], reroll["roll"]["id"])
+                self.assertEqual([reroll["roll"]], reroll["state"]["history"])
+
+class DatabaseMigrationTests(unittest.TestCase):
+    def test_existing_databases_keep_account_data_and_free_guest_slots(self):
+        root = Path(__file__).resolve().parents[1]
+        bundled_php = root / "cc_mnt/runtime/php/php.exe"
+        php = os.environ.get("RNGDLE_TEST_PHP") or (
+            str(bundled_php) if bundled_php.is_file() else shutil.which("php")
+        )
+        if not php:
+            self.skipTest("Set RNGDLE_TEST_PHP to test existing SQLite migrations")
+        php_command = [php]
+        if Path(php).resolve() == bundled_php.resolve():
+            php_command += ["-d", "extension_dir=" + str(bundled_php.parent / "ext"),
+                            "-d", "extension=pdo_sqlite"]
+        script = (
+            "require " + json.dumps(str(root / "lib/database.php").replace("\\", "/")) + ";"
+            "$db = database(); echo json_encode(['version' => (int) $db->query('PRAGMA user_version')->fetchColumn(),"
+            " 'rolls' => $db->query('SELECT * FROM rolls ORDER BY id')->fetchAll(),"
+            " 'users' => $db->query('SELECT * FROM users')->fetchAll()]);"
+        )
+        for version in (0, 1):
+            with self.subTest(previous_version=version), tempfile.TemporaryDirectory() as directory:
+                path = Path(directory) / "rngdle.sqlite"
+                with closing(sqlite3.connect(path)) as db:
+                    session_column = ", session_version INTEGER NOT NULL DEFAULT 1" if version else ""
+                    roll_columns = ", claimable INTEGER NOT NULL DEFAULT 1, poem TEXT" if version else ""
+                    db.executescript(f"""
+                        CREATE TABLE users (
+                            id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            username TEXT NOT NULL COLLATE NOCASE UNIQUE,
+                            email TEXT NOT NULL COLLATE NOCASE UNIQUE,
+                            password_hash TEXT NOT NULL,
+                            verified_at TEXT,
+                            name_color TEXT NOT NULL DEFAULT '#a5b4fc',
+                            favorite_badges_json TEXT NOT NULL DEFAULT '[]',
+                            created_at TEXT NOT NULL {session_column}
+                        );
+                        CREATE TABLE rolls (
+                            id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+                            guest_id TEXT,
+                            day TEXT NOT NULL,
+                            value INTEGER NOT NULL CHECK(value >= 0 AND value <= 1000000),
+                            ep INTEGER NOT NULL,
+                            badges_json TEXT NOT NULL,
+                            created_at TEXT NOT NULL {roll_columns},
+                            UNIQUE(user_id, day), UNIQUE(guest_id, day)
+                        );
+                        INSERT INTO users(id, username, email, password_hash, created_at)
+                            VALUES (42, 'existing', 'existing@example.test', 'saved-hash', '2026-10-01T00:00:00Z');
+                        INSERT INTO rolls(id, user_id, guest_id, day, value, ep, badges_json, created_at)
+                            VALUES (91, 42, 'signed-device', '2026-10-13', 123456, 999, '[]', '2026-10-13T00:00:00Z'),
+                                   (92, NULL, 'guest-device', '2026-10-13', 654321, 777, '[]', '2026-10-13T00:00:01Z');
+                        PRAGMA user_version = {version};
+                    """)
+                    if version:
+                        db.execute("UPDATE users SET session_version = 7, favorite_badges_json = '[\"saved-badge\"]'")
+                        db.execute("UPDATE rolls SET poem = 'Keep this poem' WHERE id = 91")
+                        db.execute("INSERT INTO rolls(id, guest_id, claimable, day, value, ep, badges_json, created_at)"
+                                   " VALUES (93, 'deleted-device', 0, '2026-10-13', 456789, 500, '[]', '2026-10-13T00:00:02Z')")
+                    db.row_factory = sqlite3.Row
+                    originals = [dict(row) for row in db.execute("SELECT * FROM rolls ORDER BY id")]
+                    original_user = dict(db.execute("SELECT * FROM users").fetchone())
+                    db.commit()
+                environment = {**os.environ, "RNGDLE_STORAGE": directory}
+                first = None
+                for _ in range(2):
+                    process = subprocess.run(php_command + ["-r", script], env=environment,
+                                             capture_output=True, text=True, timeout=20)
+                    self.assertEqual(0, process.returncode, process.stderr)
+                    snapshot = json.loads(process.stdout)
+                    self.assertEqual(2, snapshot["version"])
+                    self.assertEqual(len(originals), len(snapshot["rolls"]),
+                                     "Migrations must not delete existing saved rolls")
+                    for before, after in zip(originals, snapshot["rolls"]):
+                        for column, value in before.items():
+                            if column == "guest_id" and (before["user_id"] or before.get("claimable") == 0):
+                                self.assertIsNone(after[column])
+                            else:
+                                self.assertEqual(value, after[column], f"Saved roll field changed: {column}")
+                    for column, value in original_user.items():
+                        self.assertEqual(value, snapshot["users"][0][column])
+                    if first is None:
+                        first = snapshot
+                    else:
+                        self.assertEqual(first, snapshot, "Migration must be safe to run repeatedly")
+                with closing(sqlite3.connect(path)) as db:
+                    db.execute("INSERT INTO rolls(guest_id, day, value, ep, badges_json, created_at)"
+                               " VALUES ('signed-device', '2026-10-13', 10, 0, '[]', '2026-10-13T00:00:03Z')")
+                    with self.assertRaises(sqlite3.IntegrityError):
+                        db.execute("INSERT INTO rolls(user_id, day, value, ep, badges_json, created_at)"
+                                   " VALUES (42, '2026-10-13', 10, 0, '[]', '2026-10-13T00:00:03Z')")
 
 
 if __name__ == "__main__":

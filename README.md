@@ -1,16 +1,17 @@
 # RNGdle
 
-A daily random number game, adapted from rngdle.com for **https://kevincheng.web.illinois.edu**. One number each day, all 233 supplied badges, and your own collection. Social and feed features are excluded.
+A random number game, adapted from rngdle.com for **https://kevincheng.web.illinois.edu**. Signed-in players get one number each day; guests can roll as often as they like. All 233 supplied badges are included. Social and feed features are excluded.
 
 The app uses plain JavaScript, PHP 8.3, and SQLite. There is no JavaScript build step and no application package installation. Source files are split by purpose so you can find and change things quickly.
 
 ## What works
 
 - A server-generated roll from **0 through 1,000,000**, inclusive. Every number is equally likely.
-- One roll each UTC day. Reloading or signing up after a guest roll keeps that number. Concurrent requests cannot create a second roll.
+- One roll per account each UTC day, enforced even across devices and logout/login. Guests have unlimited rolls; only their latest result per UTC day is retained. Signing up saves that latest guest result. Signing in preserves any existing account roll for the day.
 - All 233 badges, their original predicates, EP, scoring families, and tie order. Every matching badge is earned; only the highest EP badge in each family scores.
 - Original score percentiles and roll rarity, a reset countdown, EP breakdown, and result copying.
-- A staged roll reveal: digits settle from left to right, the full number pauses and pops, then badges appear from lowest to highest EP. More valuable badges take longer, while the EP odometer rolls upward with each scoring badge. **Replay reveal** plays the saved result again without another roll. Reduced motion shows the result immediately; navigation safely ends the presentation.
+- A slower staged reveal: digits settle from left to right in neutral colors, then the full number pauses and pops in its rarity color. Badge cards include small emojis and descriptions. They arrive from lowest to highest EP, with each new card pushing older ones down. The EP odometer counts only scoring badges. **Replay reveal** replays the same result. Reduced motion shows the result immediately; navigation safely ends the presentation.
+- A prominent rarity-colored percentile line, twice its earlier size, below the rarity word. Lower rolls show “Bottom X%”; higher rolls show “Better than X%”.
 - Accounts, sign in/out, verification email, password reset, username/password changes, and account deletion.
 - Persistent history, public profiles, badge collections, badge levels and progress, badge/roll details, favorite badges, and name colors.
 - Today, this week, all-time, and badge leaderboards; total and average EP rankings.

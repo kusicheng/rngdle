@@ -23,12 +23,6 @@ function application_state(): array
     $history = roll_history($user !== null ? (int) $user['id'] : null, $user === null ? guest_identity() : null);
     $today = gmdate('Y-m-d');
     $todayRoll = isset($history[0]) && $history[0]['day'] === $today ? $history[0] : null;
-    if ($todayRoll === null) {
-        $query = database()->prepare('SELECT * FROM rolls WHERE guest_id = ? AND day = ?');
-        $query->execute([guest_identity(), $today]);
-        $deviceRoll = $query->fetch();
-        $todayRoll = $deviceRoll ? hydrate_roll($deviceRoll) : null;
-    }
     $leaderboards = leaderboards();
     return [
         'user' => $user !== null ? public_user($user, true) : null,
@@ -48,19 +42,15 @@ function perform_roll(): array
 {
     $user = current_user();
     $db = database();
-    // A write lock plus uniqueness constraints keeps concurrent requests from rerolling.
+    // A write lock plus user/day uniqueness protects signed-in daily results.
     $db->exec('BEGIN IMMEDIATE');
     $committed = false;
     try {
         $day = gmdate('Y-m-d');
-        $identity = $user !== null ? (int) $user['id'] : guest_identity();
-        $field = $user !== null ? 'user_id' : 'guest_id';
-        $query = $db->prepare('SELECT * FROM rolls WHERE ' . $field . ' = ? AND day = ?');
-        $query->execute([$identity, $day]);
-        $existing = $query->fetch();
-        if (!$existing && $user !== null) {
-            $query = $db->prepare('SELECT * FROM rolls WHERE guest_id = ? AND day = ?');
-            $query->execute([guest_identity(), $day]);
+        $existing = null;
+        if ($user !== null) {
+            $query = $db->prepare('SELECT * FROM rolls WHERE user_id = ? AND day = ?');
+            $query->execute([(int) $user['id'], $day]);
             $existing = $query->fetch();
         }
         if ($existing) {
@@ -71,9 +61,15 @@ function perform_roll(): array
         // Inclusive 0..1,000,000; the browser never chooses or submits the outcome.
         $summary = summarize_roll(random_int(0, 1000000), badge_catalog());
         $created = utc_now();
+        if ($user === null) {
+            // Guests can roll indefinitely. Save only their latest unclaimed roll
+            // each day, preserving account history and keeping storage bounded.
+            $db->prepare('DELETE FROM rolls WHERE guest_id = ? AND day = ? AND user_id IS NULL AND claimable = 1')
+                ->execute([guest_identity(), $day]);
+        }
         $query = $db->prepare('INSERT INTO rolls(user_id, guest_id, day, value, ep, badges_json, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)');
         $query->execute([
-            $user !== null ? (int) $user['id'] : null, guest_identity(),
+            $user !== null ? (int) $user['id'] : null, $user === null ? guest_identity() : null,
             $day, $summary['value'], $summary['totalEP'],
             json_encode($summary['badges'], JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR), $created,
         ]);
@@ -318,7 +314,7 @@ try {
             confirm_password($user, $input['password'] ?? null);
             database()->beginTransaction();
             try {
-                database()->prepare('UPDATE rolls SET claimable = 0, poem = NULL WHERE user_id = ?')->execute([$user['id']]);
+                database()->prepare('UPDATE rolls SET claimable = 0, guest_id = NULL, poem = NULL WHERE user_id = ?')->execute([$user['id']]);
                 database()->prepare('DELETE FROM users WHERE id = ?')->execute([$user['id']]);
                 database()->commit();
             } catch (Throwable $error) {

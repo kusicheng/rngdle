@@ -129,6 +129,18 @@ SQL);
             throw $error;
         }
     }
+    if ((int) $connection->query('PRAGMA user_version')->fetchColumn() < 2) {
+        $connection->exec('BEGIN IMMEDIATE');
+        try {
+            // Account rolls belong to the account, not the guest device. Free the
+            // legacy guest/day slot without changing saved numbers, badges, or EP.
+            $connection->exec('UPDATE rolls SET guest_id = NULL WHERE user_id IS NOT NULL OR claimable = 0');
+            $connection->exec('PRAGMA user_version = 2; COMMIT');
+        } catch (Throwable $error) {
+            $connection->exec('ROLLBACK');
+            throw $error;
+        }
+    }
     @chmod($path, 0600);
     return $connection;
 }
@@ -180,7 +192,7 @@ function roll_history(?int $userId, ?string $guestId = null): array
         $query = database()->prepare('SELECT * FROM rolls WHERE user_id = ? ORDER BY day DESC, id DESC');
         $query->execute([$userId]);
     } elseif ($guestId !== null) {
-        $query = database()->prepare('SELECT * FROM rolls WHERE guest_id = ? AND claimable = 1 ORDER BY day DESC, id DESC');
+        $query = database()->prepare('SELECT * FROM rolls WHERE guest_id = ? AND user_id IS NULL AND claimable = 1 ORDER BY day DESC, id DESC');
         $query->execute([$guestId]);
     } else {
         return [];

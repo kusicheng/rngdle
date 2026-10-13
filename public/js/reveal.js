@@ -144,6 +144,40 @@ export async function revealRoll(
     else node.setAttribute("tabindex", tabIndex);
   }
 
+  function pushBadgeToTop(node, duration) {
+    const previousPositions = badges
+      .filter(({ node: previous }) => previous.dataset.revealed === "true")
+      .map(({ node: previous }) => [
+        previous,
+        previous.getBoundingClientRect().top,
+      ]);
+    badgeList.prepend(node);
+    enableBadge(node);
+    node.dataset.revealed = "true";
+    // The new card owns its pop animation. Older cards move from their former
+    // positions to the new layout, so the stack visibly grows downward.
+    for (const [previous, top] of previousPositions) {
+      const distance = top - previous.getBoundingClientRect().top;
+      if (!distance || typeof previous.animate !== "function") continue;
+      const animation = previous.animate(
+        [
+          { transform: `translateY(${distance}px)` },
+          { transform: "translateY(0)" },
+        ],
+        {
+          duration: Math.min(duration, 520),
+          easing: "cubic-bezier(0.2, 0.8, 0.3, 1)",
+        },
+      );
+      const cancel = () => {
+        animation.cancel();
+        jobs.delete(cancel);
+      };
+      jobs.add(cancel);
+      animation.finished.then(cancel, cancel);
+    }
+  }
+
   const status = document.createElement("span");
   status.className = "reveal-status sr-only";
   status.setAttribute("role", "status");
@@ -153,7 +187,7 @@ export async function revealRoll(
   function restoreFinal() {
     // These references belong to this card, so an old reveal cannot affect a
     // newly rendered page even if its nodes use the same classes and IDs.
-    number.classList.remove("number-reels", "number-pop");
+    number.classList.remove("number-reels", "number-pop", "number-unrevealed");
     number.removeAttribute("aria-label");
     number.removeAttribute("role");
     number.textContent = finalNumber;
@@ -161,11 +195,12 @@ export async function revealRoll(
     epNumber.removeAttribute("aria-hidden");
     epNumber.textContent = format(finalEP);
     epNumber.dataset.value = String(finalEP);
-    for (const { node } of badges) {
+    for (const { node } of [...badges].reverse()) {
       enableBadge(node);
       node.dataset.revealed = "true";
+      badgeList.append(node);
     }
-    card.classList.remove("is-revealing");
+    card.classList.remove("is-revealing", "rarity-pending");
     epPill.classList.remove("ep-counting");
     card.setAttribute("aria-busy", "false");
     card.dataset.revealPhase = finished ? "complete" : "cancelled";
@@ -182,7 +217,7 @@ export async function revealRoll(
     }
     if (!current()) return false;
 
-    card.classList.add("is-revealing");
+    card.classList.add("is-revealing", "rarity-pending");
     card.setAttribute("aria-busy", "true");
     card.dataset.revealPhase = "spinning";
     card.append(status);
@@ -194,7 +229,7 @@ export async function revealRoll(
     }
 
     number.textContent = "";
-    number.classList.add("number-reels");
+    number.classList.add("number-reels", "number-unrevealed");
     number.setAttribute("role", "img");
     number.setAttribute("aria-label", "Rolling your number");
     const digits = [...finalNumber].map((digit, index) => {
@@ -257,7 +292,7 @@ export async function revealRoll(
         numberFrame = window.requestAnimationFrame(spin);
     };
     numberFrame = window.requestAnimationFrame(spin);
-    if (!(await wait(650))) return false;
+    if (!(await wait(1100))) return false;
 
     card.dataset.revealPhase = "digits";
     for (let index = 0; index < digits.length; index++) {
@@ -267,7 +302,7 @@ export async function revealRoll(
       const digit = Number(reel.element.dataset.final);
       const to = Math.ceil((from + 10 - digit) / 10) * 10 + digit;
       if (
-        !(await tween(260 + index * 85, (progress) =>
+        !(await tween(520 + index * 130, (progress) =>
           positionReel(reel, from + (to - from) * easeOut(progress)),
         ))
       )
@@ -279,11 +314,13 @@ export async function revealRoll(
     window.cancelAnimationFrame(numberFrame);
     card.dataset.revealPhase = "pause";
     number.setAttribute("aria-label", `Your roll: ${finalNumber}`);
-    if (!(await wait(900))) return false;
+    if (!(await wait(1300))) return false;
 
     card.dataset.revealPhase = "pop";
+    number.classList.remove("number-unrevealed");
+    card.classList.remove("rarity-pending");
     number.classList.add("number-pop");
-    if (!(await wait(650))) return false;
+    if (!(await wait(750))) return false;
     number.classList.remove("number-reels", "number-pop");
     number.removeAttribute("role");
     number.removeAttribute("aria-label");
@@ -304,11 +341,10 @@ export async function revealRoll(
       // Both order and badge value add suspense without making a rare roll
       // with many badges take longer than about 50 seconds.
       if (!(await wait(100 + order * 150 + value * 100))) return false;
-      enableBadge(node);
       const duration = 300 + order * 260 + value * 220;
+      pushBadgeToTop(node, duration);
       node.style.setProperty("--badge-enter-duration", `${duration}ms`);
       node.classList.add("badge-enter");
-      node.dataset.revealed = "true";
       const target =
         badge.isScoring === false
           ? awardedEP

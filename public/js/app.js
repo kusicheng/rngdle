@@ -9,11 +9,11 @@ import {
   toast,
   applyTheme,
   copyText,
-} from "./ui.js?v=roll-reveal-1";
-import * as views from "./views.js?v=roll-reveal-2";
+} from "./ui.js?v=badge-cards-1";
+import * as views from "./views.js?v=badge-cards-1";
 import { authPage, settings } from "./account.js";
 import { poetry, wordsFor } from "./poetry.js";
-import { revealRoll } from "./reveal.js?v=roll-reveal-2";
+import { revealRoll } from "./reveal.js?v=badge-cards-1";
 
 const main = document.querySelector("#main");
 const dialog = document.querySelector("#detail-dialog");
@@ -209,7 +209,7 @@ function countdown() {
   }
 }
 async function generate() {
-  if (rolling || ctx.state.today) return;
+  if (rolling || (ctx.state.user && ctx.state.today)) return;
   rolling = true;
   const button = main.querySelector('[data-action="roll"]');
   button.disabled = true;
@@ -217,6 +217,10 @@ async function generate() {
   const reduce =
     localStorage.getItem("rngdle_motion") === "reduced" ||
     matchMedia("(prefers-reduced-motion:reduce)").matches;
+  if (!reduce)
+    main
+      .querySelector(".roll-card .roll-number")
+      ?.classList.add("number-unrevealed");
   const startedNavigation = navigation;
   let timer;
   if (!reduce)

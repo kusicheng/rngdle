@@ -30,7 +30,7 @@ function start_identity(): void
     guest_identity();
 }
 
-/** A signed, durable guest cookie enforces one guest roll per UTC day. */
+/** A signed, durable cookie identifies the guest's latest saved rolls. */
 function guest_identity(): string
 {
     static $identity;
@@ -153,19 +153,24 @@ function limit_requests(string $scope, int $maximum, int $seconds, string $ident
 function migrate_guest_rolls(int $userId): void
 {
     $db = database();
-    $query = $db->prepare('UPDATE rolls SET user_id = ? WHERE guest_id = ? AND user_id IS NULL AND claimable = 1 AND day NOT IN (SELECT day FROM rolls WHERE user_id = ?)');
+    // Only the latest guest roll on each day may become an account roll. An
+    // existing account result always wins, including after logout and rerolling.
+    $query = $db->prepare('UPDATE rolls SET user_id = ?, guest_id = NULL WHERE id IN (
+        SELECT MAX(id) FROM rolls WHERE guest_id = ? AND user_id IS NULL AND claimable = 1
+        AND day NOT IN (SELECT day FROM rolls WHERE user_id = ?) GROUP BY day
+    )');
     $query->execute([$userId, guest_identity(), $userId]);
-    // Keep guest_id: signing out or switching accounts cannot reroll this device today.
 }
 
 function sign_in_user(int $userId): void
 {
-    database()->beginTransaction();
+    // Serialize claims with rolling so two sessions cannot claim a day twice.
+    database()->exec('BEGIN IMMEDIATE');
     try {
         migrate_guest_rolls($userId);
-        database()->commit();
+        database()->exec('COMMIT');
     } catch (Throwable $error) {
-        database()->rollBack();
+        database()->exec('ROLLBACK');
         throw $error;
     }
     session_regenerate_id(true);
