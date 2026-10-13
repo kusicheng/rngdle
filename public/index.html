@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#fafafa" />
+    <meta
+      name="description"
+      content="One roll per day. One number. Collect badges, earn EP, and discover what makes your number special."
+    />
+    <title>RNGdle</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="stylesheet" href="/css/style.css?v=roll-reveal-1" />
+    <script>
+      try {
+        const t = localStorage.getItem("rngdle_theme") || "system";
+        document.documentElement.dataset.theme =
+          t === "system"
+            ? matchMedia("(prefers-color-scheme:dark)").matches
+              ? "dark"
+              : "light"
+            : t;
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="header-left">
+        <a class="brand" href="/" data-link>RNGdle</a>
+        <a
+          class="icon-button"
+          href="/about"
+          aria-label="About"
+          title="About"
+          data-link
+          >ⓘ</a
+        >
+        <a class="header-nav" href="/leaderboard" data-link
+          ><span aria-hidden="true">♜</span> <span>Leaderboard</span></a
+        >
+      </div>
+      <div class="header-right">
+        <a
+          class="icon-button"
+          href="/settings"
+          aria-label="Settings"
+          title="Settings"
+          data-link
+          >⚙</a
+        >
+        <div id="account-nav">
+          <a class="button small" href="/signin" data-link>⇥ Sign in</a>
+        </div>
+      </div>
+    </header>
+    <main id="main" tabindex="-1">
+      <div class="loading" role="status">Loading your game…</div>
+    </main>
+    <nav class="bottom-nav" aria-label="Game navigation">
+      <a href="/" data-link>⚄ <span>Roll</span></a>
+      <a href="/collection" data-link>✧ <span>Collection</span></a>
+      <a href="/history" data-link>◷ <span>History</span></a>
+      <a href="/badges" data-link>▦ <span>All badges</span></a>
+    </nav>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <dialog id="detail-dialog">
+      <button class="dialog-close icon-button" aria-label="Close dialog">
+        ×
+      </button>
+      <div id="dialog-content"></div>
+    </dialog>
+    <script type="module" src="/js/app.js?v=roll-reveal-2"></script>
+  </body>
+</html>

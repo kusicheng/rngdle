@@ -1,0 +1,17 @@
+{
+  "name": "RNGdle",
+  "short_name": "RNGdle",
+  "description": "One roll per day. One number.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fafafa",
+  "theme_color": "#111827",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

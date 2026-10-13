@@ -1,0 +1,3732 @@
+[
+  {
+    "id": "jackpot-six",
+    "name": "Jackpot Six",
+    "icon": "🏦",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "Six 7s: 777777.",
+    "odds": "1 in 1,000,001",
+    "family": "JACKPOT",
+    "sourceOrder": 106,
+    "rule": {
+      "type": "equals",
+      "values": [
+        777777
+      ]
+    }
+  },
+  {
+    "id": "jackpot-exact",
+    "name": "Exact Jackpot",
+    "icon": "💰",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 777.",
+    "odds": "1 in 1,000,001",
+    "family": "JACKPOT",
+    "sourceOrder": 103,
+    "rule": {
+      "type": "equals",
+      "values": [
+        777
+      ]
+    }
+  },
+  {
+    "id": "digit-zero",
+    "name": "Zero",
+    "icon": "0️⃣",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 0.",
+    "odds": "1 in 1,000,001",
+    "family": "SINGLE_DIGIT",
+    "sourceOrder": 163,
+    "rule": {
+      "type": "equals",
+      "values": [
+        0
+      ]
+    }
+  },
+  {
+    "id": "digit-one",
+    "name": "One",
+    "icon": "1️⃣",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 1.",
+    "odds": "1 in 1,000,001",
+    "family": "SINGLE_DIGIT",
+    "sourceOrder": 164,
+    "rule": {
+      "type": "equals",
+      "values": [
+        1
+      ]
+    }
+  },
+  {
+    "id": "digit-two",
+    "name": "Two",
+    "icon": "2️⃣",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 2.",
+    "odds": "1 in 1,000,001",
+    "family": "SINGLE_DIGIT",
+    "sourceOrder": 165,
+    "rule": {
+      "type": "equals",
+      "values": [
+        2
+      ]
+    }
+  },
+  {
+    "id": "digit-three",
+    "name": "Three",
+    "icon": "3️⃣",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 3.",
+    "odds": "1 in 1,000,001",
+    "family": "SINGLE_DIGIT",
+    "sourceOrder": 166,
+    "rule": {
+      "type": "equals",
+      "values": [
+        3
+      ]
+    }
+  },
+  {
+    "id": "digit-four",
+    "name": "Four",
+    "icon": "4️⃣",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 4.",
+    "odds": "1 in 1,000,001",
+    "family": "SINGLE_DIGIT",
+    "sourceOrder": 167,
+    "rule": {
+      "type": "equals",
+      "values": [
+        4
+      ]
+    }
+  },
+  {
+    "id": "digit-five",
+    "name": "Five",
+    "icon": "5️⃣",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 5.",
+    "odds": "1 in 1,000,001",
+    "family": "SINGLE_DIGIT",
+    "sourceOrder": 168,
+    "rule": {
+      "type": "equals",
+      "values": [
+        5
+      ]
+    }
+  },
+  {
+    "id": "digit-six",
+    "name": "Six",
+    "icon": "6️⃣",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 6.",
+    "odds": "1 in 1,000,001",
+    "family": "SINGLE_DIGIT",
+    "sourceOrder": 169,
+    "rule": {
+      "type": "equals",
+      "values": [
+        6
+      ]
+    }
+  },
+  {
+    "id": "digit-seven",
+    "name": "Seven",
+    "icon": "7️⃣",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 7.",
+    "odds": "1 in 1,000,001",
+    "family": "SINGLE_DIGIT",
+    "sourceOrder": 170,
+    "rule": {
+      "type": "equals",
+      "values": [
+        7
+      ]
+    }
+  },
+  {
+    "id": "digit-eight",
+    "name": "Eight",
+    "icon": "8️⃣",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 8.",
+    "odds": "1 in 1,000,001",
+    "family": "SINGLE_DIGIT",
+    "sourceOrder": 171,
+    "rule": {
+      "type": "equals",
+      "values": [
+        8
+      ]
+    }
+  },
+  {
+    "id": "digit-nine",
+    "name": "Nine",
+    "icon": "9️⃣",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 9.",
+    "odds": "1 in 1,000,001",
+    "family": "SINGLE_DIGIT",
+    "sourceOrder": 172,
+    "rule": {
+      "type": "equals",
+      "values": [
+        9
+      ]
+    }
+  },
+  {
+    "id": "nice-exact",
+    "name": "Exact Nice",
+    "icon": "😏",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 69.",
+    "odds": "1 in 1,000,001",
+    "family": "NICE",
+    "sourceOrder": 5,
+    "rule": {
+      "type": "equals",
+      "values": [
+        69
+      ]
+    }
+  },
+  {
+    "id": "very-very-nice",
+    "name": "Very Very Nice",
+    "icon": "😏",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 696969.",
+    "odds": "1 in 1,000,001",
+    "family": "NICE",
+    "sourceOrder": 133,
+    "rule": {
+      "type": "equals",
+      "values": [
+        696969
+      ]
+    }
+  },
+  {
+    "id": "botanist-exact",
+    "name": "Exact Botanist",
+    "icon": "🌿",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 420.",
+    "odds": "1 in 1,000,001",
+    "family": "BOTANIST",
+    "sourceOrder": 110,
+    "rule": {
+      "type": "equals",
+      "values": [
+        420
+      ]
+    }
+  },
+  {
+    "id": "hotbox",
+    "name": "Hotbox",
+    "icon": "🌿",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 420420.",
+    "odds": "1 in 1,000,001",
+    "family": "BOTANIST",
+    "sourceOrder": 134,
+    "rule": {
+      "type": "equals",
+      "values": [
+        420420
+      ]
+    }
+  },
+  {
+    "id": "meaning-exact",
+    "name": "Exact Meaning",
+    "icon": "🌌",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 42.",
+    "odds": "1 in 1,000,001",
+    "family": "BOTANIST",
+    "sourceOrder": 124,
+    "rule": {
+      "type": "equals",
+      "values": [
+        42
+      ]
+    }
+  },
+  {
+    "id": "universal-answer",
+    "name": "Universal Answer",
+    "icon": "🌌",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 424242.",
+    "odds": "1 in 1,000,001",
+    "family": "MEANING",
+    "sourceOrder": 137,
+    "rule": {
+      "type": "equals",
+      "values": [
+        424242
+      ]
+    }
+  },
+  {
+    "id": "devil-exact",
+    "name": "Exact Devil",
+    "icon": "😈",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 666.",
+    "odds": "1 in 1,000,001",
+    "family": "DEVIL",
+    "sourceOrder": 112,
+    "rule": {
+      "type": "equals",
+      "values": [
+        666
+      ]
+    }
+  },
+  {
+    "id": "infernal",
+    "name": "Infernal",
+    "icon": "🔱",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 666666.",
+    "odds": "1 in 1,000,001",
+    "family": "DEVIL",
+    "sourceOrder": 129,
+    "rule": {
+      "type": "equals",
+      "values": [
+        666666
+      ]
+    }
+  },
+  {
+    "id": "leet-exact",
+    "name": "Exact Leet",
+    "icon": "💻",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 1337.",
+    "odds": "1 in 1,000,001",
+    "family": "LEET",
+    "sourceOrder": 114,
+    "rule": {
+      "type": "equals",
+      "values": [
+        1337
+      ]
+    }
+  },
+  {
+    "id": "exact-hell",
+    "name": "Exact Hell",
+    "icon": "👹",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 7734.",
+    "odds": "1 in 1,000,001",
+    "family": "HELL",
+    "sourceOrder": 116,
+    "rule": {
+      "type": "equals",
+      "values": [
+        7734
+      ]
+    }
+  },
+  {
+    "id": "exact-boob-80085",
+    "name": "Exact 80085",
+    "icon": "💎",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 80085.",
+    "odds": "1 in 1,000,001",
+    "family": "BOOB",
+    "sourceOrder": 121,
+    "rule": {
+      "type": "equals",
+      "values": [
+        80085
+      ]
+    }
+  },
+  {
+    "id": "emergency-exact",
+    "name": "Exact Emergency",
+    "icon": "🚑",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 911.",
+    "odds": "1 in 1,000,001",
+    "family": "EMERGENCY",
+    "sourceOrder": 126,
+    "rule": {
+      "type": "equals",
+      "values": [
+        911
+      ]
+    }
+  },
+  {
+    "id": "mayday",
+    "name": "Mayday",
+    "icon": "🚑",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 911911.",
+    "odds": "1 in 1,000,001",
+    "family": "EMERGENCY",
+    "sourceOrder": 135,
+    "rule": {
+      "type": "equals",
+      "values": [
+        911911
+      ]
+    }
+  },
+  {
+    "id": "error-exact",
+    "name": "Not Found",
+    "icon": "🚫",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 404.",
+    "odds": "1 in 1,000,001",
+    "family": "ERROR",
+    "sourceOrder": 128,
+    "rule": {
+      "type": "equals",
+      "values": [
+        404
+      ]
+    }
+  },
+  {
+    "id": "sixty-seven-exact",
+    "name": "Exact Six-Seven",
+    "icon": "🫠",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 67.",
+    "odds": "1 in 1,000,001",
+    "family": "SIXTY_SEVEN",
+    "sourceOrder": 208,
+    "rule": {
+      "type": "equals",
+      "values": [
+        67
+      ]
+    }
+  },
+  {
+    "id": "brainrot",
+    "name": "Brainrot",
+    "icon": "🫠",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 676767.",
+    "odds": "1 in 1,000,001",
+    "family": "SIXTY_SEVEN",
+    "sourceOrder": 216,
+    "rule": {
+      "type": "equals",
+      "values": [
+        676767
+      ]
+    }
+  },
+  {
+    "id": "eighty-six-exact",
+    "name": "Exact Eighty-Six",
+    "icon": "🍽️",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 86.",
+    "odds": "1 in 1,000,001",
+    "family": "EIGHTY_SIX",
+    "sourceOrder": 210,
+    "rule": {
+      "type": "equals",
+      "values": [
+        86
+      ]
+    }
+  },
+  {
+    "id": "orientation-exact",
+    "name": "Exact Orientation",
+    "icon": "🧭",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 101.",
+    "odds": "1 in 1,000,001",
+    "family": "ORIENTATION",
+    "sourceOrder": 212,
+    "rule": {
+      "type": "equals",
+      "values": [
+        101
+      ]
+    }
+  },
+  {
+    "id": "calendar-exact",
+    "name": "Exact Calendar",
+    "icon": "📅",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 365.",
+    "odds": "1 in 1,000,001",
+    "family": "CALENDAR",
+    "sourceOrder": 214,
+    "rule": {
+      "type": "equals",
+      "values": [
+        365
+      ]
+    }
+  },
+  {
+    "id": "groundhog-day",
+    "name": "Groundhog Day",
+    "icon": "📅",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 365365.",
+    "odds": "1 in 1,000,001",
+    "family": "CALENDAR",
+    "sourceOrder": 217,
+    "rule": {
+      "type": "equals",
+      "values": [
+        365365
+      ]
+    }
+  },
+  {
+    "id": "big-brother-exact",
+    "name": "Orwellian",
+    "icon": "👁️",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 1984.",
+    "odds": "1 in 1,000,001",
+    "family": "BIG_BROTHER",
+    "sourceOrder": 140,
+    "rule": {
+      "type": "equals",
+      "values": [
+        1984
+      ]
+    }
+  },
+  {
+    "id": "football-17776",
+    "name": "17776",
+    "icon": "🏈",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 17776.",
+    "odds": "1 in 1,000,001",
+    "family": null,
+    "sourceOrder": 130,
+    "rule": {
+      "type": "equals",
+      "values": [
+        17776
+      ]
+    }
+  },
+  {
+    "id": "full-day",
+    "name": "Full Day",
+    "icon": "⏳",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The roll is 86400, the seconds in one day.",
+    "odds": "1 in 1,000,001",
+    "family": null,
+    "sourceOrder": 219,
+    "rule": {
+      "type": "equals",
+      "values": [
+        86400
+      ]
+    }
+  },
+  {
+    "id": "one-million",
+    "name": "One Million",
+    "icon": "🐐",
+    "tier": "mythic",
+    "ep": 100000100,
+    "description": "The very top roll: 1,000,000.",
+    "odds": "1 in 1,000,001",
+    "family": null,
+    "sourceOrder": 221,
+    "rule": {
+      "type": "equals",
+      "values": [
+        1000000
+      ]
+    }
+  },
+  {
+    "id": "ultimeme-exact",
+    "name": "Funny Number",
+    "icon": "😂",
+    "tier": "mythic",
+    "ep": 50000050,
+    "description": "The roll is 69420 or 42069.",
+    "odds": "1 in 500,000",
+    "family": "ULTIMEME",
+    "sourceOrder": 132,
+    "rule": {
+      "type": "equals",
+      "values": [
+        69420,
+        42069
+      ]
+    }
+  },
+  {
+    "id": "exact-boob",
+    "name": "Exact Boob",
+    "icon": "🍈",
+    "tier": "mythic",
+    "ep": 50000050,
+    "description": "The roll is 8008 or 58008.",
+    "odds": "1 in 500,000",
+    "family": "BOOB",
+    "sourceOrder": 120,
+    "rule": {
+      "type": "equals",
+      "values": [
+        8008,
+        58008
+      ]
+    }
+  },
+  {
+    "id": "always",
+    "name": "Always",
+    "icon": "♾️",
+    "tier": "mythic",
+    "ep": 50000050,
+    "description": "The roll is 247365 or 365247: 24/7, all year.",
+    "odds": "1 in 500,000",
+    "family": "CALENDAR",
+    "sourceOrder": 218,
+    "rule": {
+      "type": "equals",
+      "values": [
+        247365,
+        365247
+      ]
+    }
+  },
+  {
+    "id": "thirteenth-power",
+    "name": "13th Power",
+    "icon": "💀",
+    "tier": "mythic",
+    "ep": 33333367,
+    "description": "Some whole number to the 13th power.",
+    "odds": "1 in 333,334",
+    "family": "POWER",
+    "sourceOrder": 69,
+    "rule": {
+      "type": "integerPower",
+      "exponent": 13
+    }
+  },
+  {
+    "id": "seventeenth-power",
+    "name": "17th Power",
+    "icon": "🧙",
+    "tier": "mythic",
+    "ep": 33333367,
+    "description": "Some whole number to the 17th power.",
+    "odds": "1 in 333,334",
+    "family": "POWER",
+    "sourceOrder": 70,
+    "rule": {
+      "type": "integerPower",
+      "exponent": 17
+    }
+  },
+  {
+    "id": "nineteenth-power",
+    "name": "19th Power",
+    "icon": "🌑",
+    "tier": "mythic",
+    "ep": 33333367,
+    "description": "Some whole number to the 19th power.",
+    "odds": "1 in 333,334",
+    "family": "POWER",
+    "sourceOrder": 71,
+    "rule": {
+      "type": "integerPower",
+      "exponent": 19
+    }
+  },
+  {
+    "id": "tau",
+    "name": "Tau",
+    "icon": "🌀",
+    "tier": "mythic",
+    "ep": 33333367,
+    "description": "The roll is τ cut short: 6283, 62831 or 628318.",
+    "odds": "1 in 333,334",
+    "family": "TAU",
+    "sourceOrder": 199,
+    "rule": {
+      "type": "equals",
+      "values": [
+        6283,
+        62831,
+        628318
+      ]
+    }
+  },
+  {
+    "id": "golden-ratio",
+    "name": "Golden Ratio",
+    "icon": "🐚",
+    "tier": "mythic",
+    "ep": 33333367,
+    "description": "The roll is φ cut short: 1618, 16180 or 161803.",
+    "odds": "1 in 333,334",
+    "family": null,
+    "sourceOrder": 200,
+    "rule": {
+      "type": "equals",
+      "values": [
+        1618,
+        16180,
+        161803
+      ]
+    }
+  },
+  {
+    "id": "tenth-power",
+    "name": "10th Power",
+    "icon": "🔟",
+    "tier": "mythic",
+    "ep": 25000025,
+    "description": "Some whole number to the 10th power.",
+    "odds": "1 in 250,000",
+    "family": "POWER",
+    "sourceOrder": 67,
+    "rule": {
+      "type": "integerPower",
+      "exponent": 10
+    }
+  },
+  {
+    "id": "eleventh-power",
+    "name": "11th Power",
+    "icon": "🕚",
+    "tier": "mythic",
+    "ep": 25000025,
+    "description": "Some whole number to the 11th power.",
+    "odds": "1 in 250,000",
+    "family": "POWER",
+    "sourceOrder": 68,
+    "rule": {
+      "type": "integerPower",
+      "exponent": 11
+    }
+  },
+  {
+    "id": "consec-quad-exact",
+    "name": "4 Consecutive Numbers",
+    "icon": "⛓️",
+    "tier": "mythic",
+    "ep": 25000025,
+    "description": "Cut in four, the pieces count up or down by one, in order.",
+    "odds": "1 in 250,000",
+    "family": "CONSECUTIVE",
+    "sourceOrder": 222,
+    "rule": {
+      "type": "consecutiveSplit",
+      "pieces": 4,
+      "mode": "ordered"
+    }
+  },
+  {
+    "id": "pi",
+    "name": "Pi",
+    "icon": "🥧",
+    "tier": "mythic",
+    "ep": 25000025,
+    "description": "The roll is π cut short: 314, 3141, 31415 or 314159.",
+    "odds": "1 in 250,000",
+    "family": "PI",
+    "sourceOrder": 192,
+    "rule": {
+      "type": "equals",
+      "values": [
+        314,
+        3141,
+        31415,
+        314159
+      ]
+    }
+  },
+  {
+    "id": "e",
+    "name": "Euler's Number",
+    "icon": "📈",
+    "tier": "mythic",
+    "ep": 25000025,
+    "description": "The roll is e cut short: 271, 2718, 27182 or 271828.",
+    "odds": "1 in 250,000",
+    "family": "E",
+    "sourceOrder": 196,
+    "rule": {
+      "type": "equals",
+      "values": [
+        271,
+        2718,
+        27182,
+        271828
+      ]
+    }
+  },
+  {
+    "id": "ninth-power",
+    "name": "9th Power",
+    "icon": "☁️",
+    "tier": "mythic",
+    "ep": 20000020,
+    "description": "Some whole number to the 9th power.",
+    "odds": "1 in 200,000",
+    "family": "POWER",
+    "sourceOrder": 66,
+    "rule": {
+      "type": "integerPower",
+      "exponent": 9
+    }
+  },
+  {
+    "id": "eighth-power",
+    "name": "8th Power",
+    "icon": "🎱",
+    "tier": "mythic",
+    "ep": 16666683,
+    "description": "Some whole number to the 8th power.",
+    "odds": "1 in 166,667",
+    "family": "POWER",
+    "sourceOrder": 65,
+    "rule": {
+      "type": "integerPower",
+      "exponent": 8
+    }
+  },
+  {
+    "id": "ouroboros",
+    "name": "Ouroboros",
+    "icon": "🐍",
+    "tier": "mythic",
+    "ep": 14285729,
+    "description": "A number raised to its own power: 1¹, 2², 3³ … up to 7⁷.",
+    "odds": "1 in 142,857",
+    "family": "POWER",
+    "sourceOrder": 77,
+    "rule": {
+      "type": "equals",
+      "values": [
+        1,
+        4,
+        27,
+        256,
+        3125,
+        46656,
+        823543
+      ]
+    }
+  },
+  {
+    "id": "power-of-seven",
+    "name": "Power of Seven",
+    "icon": "7️⃣",
+    "tier": "mythic",
+    "ep": 12500013,
+    "description": "1, 7, 49, 343… multiplying by 7 each time.",
+    "odds": "1 in 125,000",
+    "family": null,
+    "sourceOrder": 76,
+    "rule": {
+      "type": "powerOf",
+      "base": 7
+    }
+  },
+  {
+    "id": "seventh-power",
+    "name": "7th Power",
+    "icon": "🌈",
+    "tier": "mythic",
+    "ep": 12500013,
+    "description": "Some whole number to the 7th power.",
+    "odds": "1 in 125,000",
+    "family": "POWER",
+    "sourceOrder": 64,
+    "rule": {
+      "type": "integerPower",
+      "exponent": 7
+    }
+  },
+  {
+    "id": "factorial",
+    "name": "Factorial",
+    "icon": "❗",
+    "tier": "mythic",
+    "ep": 11111122,
+    "description": "Equal to 1 × 2 × 3 × … up to some whole number.",
+    "odds": "1 in 111,111",
+    "family": null,
+    "sourceOrder": 79,
+    "rule": {
+      "type": "factorial"
+    }
+  },
+  {
+    "id": "power-of-five",
+    "name": "Power of Five",
+    "icon": "5️⃣",
+    "tier": "mythic",
+    "ep": 11111122,
+    "description": "1, 5, 25, 125… multiplying by 5 each time.",
+    "odds": "1 in 111,111",
+    "family": null,
+    "sourceOrder": 75,
+    "rule": {
+      "type": "powerOf",
+      "base": 5
+    }
+  },
+  {
+    "id": "sequence-6",
+    "name": "Sequence (6)",
+    "icon": "🔢",
+    "tier": "mythic",
+    "ep": 11111122,
+    "description": "Six digits in a row counting up or down by one.",
+    "odds": "1 in 111,111",
+    "family": "PROGRESSION",
+    "sourceOrder": 157,
+    "rule": {
+      "type": "sequence",
+      "length": 6
+    }
+  },
+  {
+    "id": "hello",
+    "name": "Hello",
+    "icon": "👋",
+    "tier": "mythic",
+    "ep": 11111122,
+    "description": "Has 07734 in it, which reads HELLO on an upside-down calculator.",
+    "odds": "1 in 111,111",
+    "family": null,
+    "sourceOrder": 122,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "07734"
+      ]
+    }
+  },
+  {
+    "id": "one-digit",
+    "name": "Single Digit",
+    "icon": "☝️",
+    "tier": "mythic",
+    "ep": 10000010,
+    "description": "A roll from 0 to 9.",
+    "odds": "1 in 100,000",
+    "family": "SINGLE_DIGIT",
+    "sourceOrder": 162,
+    "rule": {
+      "type": "length",
+      "length": 1
+    }
+  },
+  {
+    "id": "eon",
+    "name": "Eon",
+    "icon": "🗿",
+    "tier": "mythic",
+    "ep": 10000010,
+    "description": "Last five digits are 00000.",
+    "odds": "1 in 100,000",
+    "family": "VOID_DEPTH",
+    "sourceOrder": 14,
+    "rule": {
+      "type": "suffix",
+      "pattern": "00000"
+    }
+  },
+  {
+    "id": "semi-eon",
+    "name": "Semi-Eon",
+    "icon": "🦴",
+    "tier": "mythic",
+    "ep": 10000010,
+    "description": "Last five digits are 50000.",
+    "odds": "1 in 100,000",
+    "family": "VOID_DEPTH",
+    "sourceOrder": 206,
+    "rule": {
+      "type": "suffix",
+      "pattern": "50000"
+    }
+  },
+  {
+    "id": "quint-nine",
+    "name": "Quint Nine",
+    "icon": "🥳",
+    "tier": "mythic",
+    "ep": 10000010,
+    "description": "Last five digits are 99999.",
+    "odds": "1 in 100,000",
+    "family": "NINE_ENDING",
+    "sourceOrder": 181,
+    "rule": {
+      "type": "suffix",
+      "pattern": "99999"
+    }
+  },
+  {
+    "id": "deep-void-five",
+    "name": "Deep Void (5)",
+    "icon": "⚫",
+    "tier": "mythic",
+    "ep": 10000010,
+    "description": "Five 0s in a row somewhere.",
+    "odds": "1 in 100,000",
+    "family": "VOID_DEPTH",
+    "sourceOrder": 154,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "00000"
+      ]
+    }
+  },
+  {
+    "id": "contiguous-sixes",
+    "name": "Contiguous Sixes",
+    "icon": "➖➖➖➖",
+    "tier": "mythic",
+    "ep": 10000010,
+    "description": "The same digit six times in a row.",
+    "odds": "1 in 100,000",
+    "family": "CONTIGUOUS_RUN",
+    "sourceOrder": 44,
+    "rule": {
+      "type": "run",
+      "length": 6
+    }
+  },
+  {
+    "id": "sixth-power",
+    "name": "6th Power",
+    "icon": "🎲",
+    "tier": "anomaly",
+    "ep": 9090918,
+    "description": "Some whole number to the 6th power.",
+    "odds": "1 in 90,909",
+    "family": "POWER",
+    "sourceOrder": 63,
+    "rule": {
+      "type": "integerPower",
+      "exponent": 6
+    }
+  },
+  {
+    "id": "power-of-three",
+    "name": "Power of Three",
+    "icon": "🔺",
+    "tier": "anomaly",
+    "ep": 7692315,
+    "description": "1, 3, 9, 27… tripling all the way.",
+    "odds": "1 in 76,923",
+    "family": null,
+    "sourceOrder": 74,
+    "rule": {
+      "type": "powerOf",
+      "base": 3
+    }
+  },
+  {
+    "id": "fifth-power",
+    "name": "5th Power",
+    "icon": "🖐️",
+    "tier": "anomaly",
+    "ep": 6250006,
+    "description": "Some whole number to the 5th power.",
+    "odds": "1 in 62,500",
+    "family": "POWER",
+    "sourceOrder": 62,
+    "rule": {
+      "type": "integerPower",
+      "exponent": 5
+    }
+  },
+  {
+    "id": "jackpot-five",
+    "name": "Jackpot Five",
+    "icon": "💰💰💰",
+    "tier": "anomaly",
+    "ep": 5263163,
+    "description": "Has 77777 in it.",
+    "odds": "1 in 52,632",
+    "family": "JACKPOT",
+    "sourceOrder": 105,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "77777"
+      ]
+    }
+  },
+  {
+    "id": "power-of-two",
+    "name": "Power of Two",
+    "icon": "💾",
+    "tier": "anomaly",
+    "ep": 5000005,
+    "description": "1, 2, 4, 8, 16… doubling all the way.",
+    "odds": "1 in 50,000",
+    "family": null,
+    "sourceOrder": 73,
+    "rule": {
+      "type": "powerOf",
+      "base": 2
+    }
+  },
+  {
+    "id": "royal-flush",
+    "name": "Royal Flush",
+    "icon": "👑",
+    "tier": "anomaly",
+    "ep": 5000005,
+    "description": "Contains 56789, the top straight.",
+    "odds": "1 in 50,000",
+    "family": "STRAIGHT",
+    "sourceOrder": 97,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "56789"
+      ]
+    }
+  },
+  {
+    "id": "pi-contains-5",
+    "name": "Pi Slice (5)",
+    "icon": "🥧",
+    "tier": "anomaly",
+    "ep": 5000005,
+    "description": "Has 31415 in it.",
+    "odds": "1 in 50,000",
+    "family": "PI",
+    "sourceOrder": 191,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "31415"
+      ]
+    }
+  },
+  {
+    "id": "e-contains-5",
+    "name": "E Slice (5)",
+    "icon": "📈",
+    "tier": "anomaly",
+    "ep": 5000005,
+    "description": "Has 27182 in it.",
+    "odds": "1 in 50,000",
+    "family": "E",
+    "sourceOrder": 195,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "27182"
+      ]
+    }
+  },
+  {
+    "id": "tau-slice-5",
+    "name": "Tau Slice (5)",
+    "icon": "🌀",
+    "tier": "anomaly",
+    "ep": 5000005,
+    "description": "Has 62831 in it.",
+    "odds": "1 in 50,000",
+    "family": "TAU",
+    "sourceOrder": 198,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "62831"
+      ]
+    }
+  },
+  {
+    "id": "boob-58008",
+    "name": "58008",
+    "icon": "🔠",
+    "tier": "anomaly",
+    "ep": 5000005,
+    "description": "Has 58008 in it, the upside-down calculator classic.",
+    "odds": "1 in 50,000",
+    "family": "BOOB",
+    "sourceOrder": 118,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "58008"
+      ]
+    }
+  },
+  {
+    "id": "boob-80085",
+    "name": "80085",
+    "icon": "🅱️",
+    "tier": "anomaly",
+    "ep": 5000005,
+    "description": "Has 80085 in it, the right-way-up calculator classic.",
+    "odds": "1 in 50,000",
+    "family": "BOOB",
+    "sourceOrder": 119,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "80085"
+      ]
+    }
+  },
+  {
+    "id": "fibonacci",
+    "name": "Fibonacci Number",
+    "icon": "🐚",
+    "tier": "anomaly",
+    "ep": 3333337,
+    "description": "Appears in the sequence 0, 1, 1, 2, 3, 5, 8, 13… where each term is the sum of the two before.",
+    "odds": "1 in 33,333",
+    "family": null,
+    "sourceOrder": 72,
+    "rule": {
+      "type": "fibonacci"
+    }
+  },
+  {
+    "id": "cascade",
+    "name": "Cascade",
+    "icon": "🌊",
+    "tier": "anomaly",
+    "ep": 3333337,
+    "description": "Counts up by one from start to finish, like 3456.",
+    "odds": "1 in 33,333",
+    "family": "PROGRESSION",
+    "sourceOrder": 30,
+    "rule": {
+      "type": "sequence",
+      "whole": true,
+      "direction": 1,
+      "minLength": 2
+    }
+  },
+  {
+    "id": "fourth-power",
+    "name": "4th Power",
+    "icon": "📦",
+    "tier": "anomaly",
+    "ep": 3125003,
+    "description": "Some whole number to the 4th power.",
+    "odds": "1 in 31,250",
+    "family": "POWER",
+    "sourceOrder": 61,
+    "rule": {
+      "type": "integerPower",
+      "exponent": 4
+    }
+  },
+  {
+    "id": "waterfall",
+    "name": "Waterfall",
+    "icon": "🚿",
+    "tier": "anomaly",
+    "ep": 2857146,
+    "description": "Counts down by one from start to finish, like 6543.",
+    "odds": "1 in 28,571",
+    "family": "PROGRESSION",
+    "sourceOrder": 31,
+    "rule": {
+      "type": "sequence",
+      "whole": true,
+      "direction": -1,
+      "minLength": 2
+    }
+  },
+  {
+    "id": "consec-quad-contains",
+    "name": "4 Consecutive Numbers (Contains)",
+    "icon": "🔗",
+    "tier": "anomaly",
+    "ep": 2631582,
+    "description": "Somewhere inside, four numbers count up or down by one back to back.",
+    "odds": "1 in 26,316",
+    "family": "CONSECUTIVE",
+    "sourceOrder": 224,
+    "rule": {
+      "type": "consecutiveSplit",
+      "pieces": 4,
+      "mode": "contains"
+    }
+  },
+  {
+    "id": "consec-quad-scrambled",
+    "name": "4 Consecutive Numbers (Scrambled)",
+    "icon": "🔀",
+    "tier": "anomaly",
+    "ep": 2272730,
+    "description": "Cut in four, the pieces are consecutive numbers but out of order.",
+    "odds": "1 in 22,727",
+    "family": "CONSECUTIVE",
+    "sourceOrder": 223,
+    "rule": {
+      "type": "consecutiveSplit",
+      "pieces": 4,
+      "mode": "scrambled"
+    }
+  },
+  {
+    "id": "homogeneous",
+    "name": "Homogeneous",
+    "icon": "🥛",
+    "tier": "anomaly",
+    "ep": 2222224,
+    "description": "Two or more digits, all the same.",
+    "odds": "1 in 22,222",
+    "family": null,
+    "sourceOrder": 50,
+    "rule": {
+      "type": "uniqueDigits",
+      "count": 1,
+      "minLength": 2
+    }
+  },
+  {
+    "id": "ultimeme",
+    "name": "Funny Numbers",
+    "icon": "😂",
+    "tier": "anomaly",
+    "ep": 1666668,
+    "description": "Has both 69 and 420 in it.",
+    "odds": "1 in 16,667",
+    "family": "ULTIMEME",
+    "sourceOrder": 131,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "69",
+        "420"
+      ],
+      "all": true
+    }
+  },
+  {
+    "id": "binary-soul",
+    "name": "Binary Soul",
+    "icon": "🤖",
+    "tier": "anomaly",
+    "ep": 1538463,
+    "description": "Nothing but 0s and 1s.",
+    "odds": "1 in 15,385",
+    "family": null,
+    "sourceOrder": 45,
+    "rule": {
+      "type": "allDigits",
+      "digits": "01"
+    }
+  },
+  {
+    "id": "straight-flush",
+    "name": "Straight Flush",
+    "icon": "🃏",
+    "tier": "anomaly",
+    "ep": 1449277,
+    "description": "Contains 02468, 13579, or either one backwards.",
+    "odds": "1 in 14,493",
+    "family": "STRAIGHT",
+    "sourceOrder": 96,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "02468",
+        "13579",
+        "86420",
+        "97531"
+      ]
+    }
+  },
+  {
+    "id": "two-digits",
+    "name": "Two Digits",
+    "icon": "✌️",
+    "tier": "anomaly",
+    "ep": 1111112,
+    "description": "A roll from 10 to 99.",
+    "odds": "1 in 11,111",
+    "family": null,
+    "sourceOrder": 173,
+    "rule": {
+      "type": "length",
+      "length": 2
+    }
+  },
+  {
+    "id": "spy",
+    "name": "Spy Number",
+    "icon": "🕵️",
+    "tier": "anomaly",
+    "ep": 1030929,
+    "description": "Adding its digits gives the same result as multiplying them.",
+    "odds": "1 in 10,309",
+    "family": null,
+    "sourceOrder": 81,
+    "rule": {
+      "type": "spy"
+    }
+  },
+  {
+    "id": "epoch",
+    "name": "Epoch",
+    "icon": "🏛️",
+    "tier": "anomaly",
+    "ep": 1000001,
+    "description": "Last four digits are 0000.",
+    "odds": "1 in 10,000",
+    "family": "VOID_DEPTH",
+    "sourceOrder": 13,
+    "rule": {
+      "type": "suffix",
+      "pattern": "0000"
+    }
+  },
+  {
+    "id": "semi-epoch",
+    "name": "Semi-Epoch",
+    "icon": "⌛",
+    "tier": "anomaly",
+    "ep": 1000001,
+    "description": "Last four digits are 5000.",
+    "odds": "1 in 10,000",
+    "family": "VOID_DEPTH",
+    "sourceOrder": 205,
+    "rule": {
+      "type": "suffix",
+      "pattern": "5000"
+    }
+  },
+  {
+    "id": "quad-nine",
+    "name": "Quad Nine",
+    "icon": "🎊",
+    "tier": "anomaly",
+    "ep": 1000001,
+    "description": "Last four digits are 9999.",
+    "odds": "1 in 10,000",
+    "family": "NINE_ENDING",
+    "sourceOrder": 180,
+    "rule": {
+      "type": "suffix",
+      "pattern": "9999"
+    }
+  },
+  {
+    "id": "cube",
+    "name": "3rd Power",
+    "icon": "🧊",
+    "tier": "epic",
+    "ep": 990100,
+    "description": "Some whole number cubed.",
+    "odds": "1 in 9,901",
+    "family": "POWER",
+    "sourceOrder": 60,
+    "rule": {
+      "type": "integerPower",
+      "exponent": 3
+    }
+  },
+  {
+    "id": "even-spacing",
+    "name": "Even Spacing",
+    "icon": "📏",
+    "tier": "epic",
+    "ep": 862070,
+    "description": "Three or more digits that change by the same amount each step.",
+    "odds": "1 in 8,621",
+    "family": "PROGRESSION",
+    "sourceOrder": 182,
+    "rule": {
+      "type": "spacing",
+      "minLength": 3
+    }
+  },
+  {
+    "id": "consec-triple-exact",
+    "name": "3 Consecutive Numbers",
+    "icon": "⛓️",
+    "tier": "epic",
+    "ep": 555556,
+    "description": "Cut in three, the pieces count up or down by one, in order.",
+    "odds": "1 in 5,556",
+    "family": "CONSECUTIVE",
+    "sourceOrder": 225,
+    "rule": {
+      "type": "consecutiveSplit",
+      "pieces": 3,
+      "mode": "ordered"
+    }
+  },
+  {
+    "id": "deep-void-four",
+    "name": "Deep Void (4)",
+    "icon": "🌌",
+    "tier": "epic",
+    "ep": 552487,
+    "description": "Four 0s in a row somewhere.",
+    "odds": "1 in 5,525",
+    "family": "VOID_DEPTH",
+    "sourceOrder": 153,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "0000"
+      ]
+    }
+  },
+  {
+    "id": "contiguous-fives",
+    "name": "Contiguous Fives",
+    "icon": "➖➖➖",
+    "tier": "epic",
+    "ep": 552487,
+    "description": "The same digit five times in a row.",
+    "odds": "1 in 5,525",
+    "family": "CONTIGUOUS_RUN",
+    "sourceOrder": 43,
+    "rule": {
+      "type": "run",
+      "length": 5
+    }
+  },
+  {
+    "id": "strobogrammatic",
+    "name": "Strobogrammatic",
+    "icon": "🙃",
+    "tier": "epic",
+    "ep": 502513,
+    "description": "Turn it upside down and it still reads the same.",
+    "odds": "1 in 5,025",
+    "family": null,
+    "sourceOrder": 188,
+    "rule": {
+      "type": "strobogrammatic"
+    }
+  },
+  {
+    "id": "straight",
+    "name": "Straight",
+    "icon": "📏",
+    "tier": "epic",
+    "ep": 454546,
+    "description": "Five digits in a row counting up or down by one, like 34567.",
+    "odds": "1 in 4,545",
+    "family": "STRAIGHT",
+    "sourceOrder": 94,
+    "rule": {
+      "type": "sequence",
+      "length": 5
+    }
+  },
+  {
+    "id": "jackpot-four",
+    "name": "Jackpot Four",
+    "icon": "💰💰",
+    "tier": "epic",
+    "ep": 357143,
+    "description": "Has 7777 in it.",
+    "odds": "1 in 3,571",
+    "family": "JACKPOT",
+    "sourceOrder": 104,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "7777"
+      ]
+    }
+  },
+  {
+    "id": "very-nice",
+    "name": "Very Nice",
+    "icon": "🥵",
+    "tier": "epic",
+    "ep": 334448,
+    "description": "Has 6969 in it.",
+    "odds": "1 in 3,344",
+    "family": "NICE",
+    "sourceOrder": 108,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "6969"
+      ]
+    }
+  },
+  {
+    "id": "deeper-meaning",
+    "name": "Deeper Meaning",
+    "icon": "🌌",
+    "tier": "epic",
+    "ep": 334448,
+    "description": "Has 4242 in it.",
+    "odds": "1 in 3,344",
+    "family": "MEANING",
+    "sourceOrder": 136,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "4242"
+      ]
+    }
+  },
+  {
+    "id": "sixty-seven-double",
+    "name": "6767",
+    "icon": "🫠",
+    "tier": "epic",
+    "ep": 334448,
+    "description": "Has 6767 in it.",
+    "odds": "1 in 3,344",
+    "family": "SIXTY_SEVEN",
+    "sourceOrder": 215,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "6767"
+      ]
+    }
+  },
+  {
+    "id": "pi-contains-4",
+    "name": "Pi Slice (4)",
+    "icon": "🥧",
+    "tier": "epic",
+    "ep": 333334,
+    "description": "Has 3141 in it.",
+    "odds": "1 in 3,333",
+    "family": "PI",
+    "sourceOrder": 190,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "3141"
+      ]
+    }
+  },
+  {
+    "id": "e-contains-4",
+    "name": "E Slice (4)",
+    "icon": "📈",
+    "tier": "epic",
+    "ep": 333334,
+    "description": "Has 2718 in it.",
+    "odds": "1 in 3,333",
+    "family": "E",
+    "sourceOrder": 194,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "2718"
+      ]
+    }
+  },
+  {
+    "id": "tau-slice-4",
+    "name": "Tau Slice (4)",
+    "icon": "🌀",
+    "tier": "epic",
+    "ep": 333334,
+    "description": "Has 6283 in it.",
+    "odds": "1 in 3,333",
+    "family": "TAU",
+    "sourceOrder": 197,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "6283"
+      ]
+    }
+  },
+  {
+    "id": "leet",
+    "name": "Leet",
+    "icon": "💻",
+    "tier": "epic",
+    "ep": 333334,
+    "description": "Has 1337 in it.",
+    "odds": "1 in 3,333",
+    "family": "LEET",
+    "sourceOrder": 113,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "1337"
+      ]
+    }
+  },
+  {
+    "id": "hell",
+    "name": "Hell",
+    "icon": "🔥",
+    "tier": "epic",
+    "ep": 333334,
+    "description": "Has 7734 in it, which reads HELL on an upside-down calculator.",
+    "odds": "1 in 3,333",
+    "family": "HELL",
+    "sourceOrder": 115,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "7734"
+      ]
+    }
+  },
+  {
+    "id": "boob-8008",
+    "name": "8008",
+    "icon": "🔢",
+    "tier": "epic",
+    "ep": 333334,
+    "description": "Has 8008 in it, a calculator classic.",
+    "odds": "1 in 3,333",
+    "family": "BOOB",
+    "sourceOrder": 117,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "8008"
+      ]
+    }
+  },
+  {
+    "id": "big-brother",
+    "name": "Big Brother",
+    "icon": "👁️",
+    "tier": "epic",
+    "ep": 333334,
+    "description": "Has 1984 in it.",
+    "odds": "1 in 3,333",
+    "family": "BIG_BROTHER",
+    "sourceOrder": 139,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "1984"
+      ]
+    }
+  },
+  {
+    "id": "consec-triple-scrambled",
+    "name": "3 Consecutive Numbers (Scrambled)",
+    "icon": "🔀",
+    "tier": "epic",
+    "ep": 277778,
+    "description": "Cut in three, the pieces are consecutive numbers but out of order.",
+    "odds": "1 in 2,778",
+    "family": "CONSECUTIVE",
+    "sourceOrder": 226,
+    "rule": {
+      "type": "consecutiveSplit",
+      "pieces": 3,
+      "mode": "scrambled"
+    }
+  },
+  {
+    "id": "zipper",
+    "name": "Zipper",
+    "icon": "🤐",
+    "tier": "epic",
+    "ep": 246914,
+    "description": "Two digits taking turns, never the same one twice in a row.",
+    "odds": "1 in 2,469",
+    "family": null,
+    "sourceOrder": 52,
+    "rule": {
+      "type": "zipper"
+    }
+  },
+  {
+    "id": "ascension",
+    "name": "Ascension",
+    "icon": "📈",
+    "tier": "epic",
+    "ep": 219298,
+    "description": "Each digit is bigger than the one before.",
+    "odds": "1 in 2,193",
+    "family": "MONOTONIC",
+    "sourceOrder": 26,
+    "rule": {
+      "type": "monotonic",
+      "direction": 1,
+      "strict": true
+    }
+  },
+  {
+    "id": "geometric",
+    "name": "Crescendo",
+    "icon": "🔊",
+    "tier": "epic",
+    "ep": 208334,
+    "description": "Cut into three or more numbers that grow or shrink by the same ratio.",
+    "odds": "1 in 2,083",
+    "family": "PROGRESSION",
+    "sourceOrder": 232,
+    "rule": {
+      "type": "progressionSplit",
+      "mode": "geometric"
+    }
+  },
+  {
+    "id": "five-of-a-kind",
+    "name": "Five of a Kind",
+    "icon": "🃏",
+    "tier": "epic",
+    "ep": 198020,
+    "description": "Some digit appears five or more times.",
+    "odds": "1 in 1,980",
+    "family": "OF_A_KIND",
+    "sourceOrder": 91,
+    "rule": {
+      "type": "frequency",
+      "count": 5,
+      "atLeast": true
+    }
+  },
+  {
+    "id": "consec-triple-contains",
+    "name": "3 Consecutive Numbers (Contains)",
+    "icon": "🔗",
+    "tier": "epic",
+    "ep": 157978,
+    "description": "Somewhere inside, three numbers count up or down by one back to back.",
+    "odds": "1 in 1,580",
+    "family": "CONSECUTIVE",
+    "sourceOrder": 227,
+    "rule": {
+      "type": "consecutiveSplit",
+      "pieces": 3,
+      "mode": "contains"
+    }
+  },
+  {
+    "id": "contiguous-three-pair",
+    "name": "Contiguous Three Pair",
+    "icon": "👨‍👩‍👧‍👦👯",
+    "tier": "epic",
+    "ep": 154321,
+    "description": "Three different doubled digits back to back, like 113355.",
+    "odds": "1 in 1,543",
+    "family": "PAIRS",
+    "sourceOrder": 88,
+    "rule": {
+      "type": "adjacentPairs",
+      "groups": 3,
+      "exactCount": true
+    }
+  },
+  {
+    "id": "framed-pair",
+    "name": "Framed Pair",
+    "icon": "🖼️",
+    "tier": "epic",
+    "ep": 137174,
+    "description": "Four digits: a doubled digit in the middle, with different digits on each end.",
+    "odds": "1 in 1,372",
+    "family": "PAIRS",
+    "sourceOrder": 55,
+    "rule": {
+      "type": "framedRun",
+      "length": 2
+    }
+  },
+  {
+    "id": "framed-triple",
+    "name": "Framed Triple",
+    "icon": "🖼️🖼️",
+    "tier": "epic",
+    "ep": 137174,
+    "description": "Five digits: a tripled digit in the middle, with different digits on each end.",
+    "odds": "1 in 1,372",
+    "family": "OF_A_KIND",
+    "sourceOrder": 56,
+    "rule": {
+      "type": "framedRun",
+      "length": 3
+    }
+  },
+  {
+    "id": "framed-quad",
+    "name": "Framed Quad",
+    "icon": "🪟",
+    "tier": "epic",
+    "ep": 137174,
+    "description": "Six digits: the middle four identical, with different digits on each end.",
+    "odds": "1 in 1,372",
+    "family": "OF_A_KIND",
+    "sourceOrder": 57,
+    "rule": {
+      "type": "framedRun",
+      "length": 4
+    }
+  },
+  {
+    "id": "decay",
+    "name": "Decay",
+    "icon": "📉",
+    "tier": "epic",
+    "ep": 119474,
+    "description": "Each digit is smaller than the one before.",
+    "odds": "1 in 1,195",
+    "family": "MONOTONIC",
+    "sourceOrder": 27,
+    "rule": {
+      "type": "monotonic",
+      "direction": -1,
+      "strict": true
+    }
+  },
+  {
+    "id": "three-digits",
+    "name": "Three Digits",
+    "icon": "🤟",
+    "tier": "epic",
+    "ep": 111111,
+    "description": "A roll from 100 to 999.",
+    "odds": "1 in 1,111",
+    "family": null,
+    "sourceOrder": 174,
+    "rule": {
+      "type": "length",
+      "length": 3
+    }
+  },
+  {
+    "id": "echo",
+    "name": "Echo",
+    "icon": "📣",
+    "tier": "epic",
+    "ep": 100100,
+    "description": "The second half is a copy of the first half.",
+    "odds": "1 in 1,001",
+    "family": null,
+    "sourceOrder": 23,
+    "rule": {
+      "type": "repeat",
+      "whole": true
+    }
+  },
+  {
+    "id": "colossal",
+    "name": "Colossal",
+    "icon": "🪨",
+    "tier": "epic",
+    "ep": 100000,
+    "description": "Anything above 999,000.",
+    "odds": "1 in 1,000",
+    "family": null,
+    "sourceOrder": 220,
+    "rule": {
+      "type": "range",
+      "min": 999001,
+      "max": 1000000
+    }
+  },
+  {
+    "id": "pronic",
+    "name": "Pronic Number",
+    "icon": "🧮",
+    "tier": "epic",
+    "ep": 100000,
+    "description": "Equal to some whole number times the next one up, like 6 = 2 × 3.",
+    "odds": "1 in 1,000",
+    "family": null,
+    "sourceOrder": 82,
+    "rule": {
+      "type": "pronic"
+    }
+  },
+  {
+    "id": "millennium",
+    "name": "Millennium",
+    "icon": "🗓️",
+    "tier": "epic",
+    "ep": 100000,
+    "description": "Last three digits are 000.",
+    "odds": "1 in 1,000",
+    "family": "VOID_DEPTH",
+    "sourceOrder": 12,
+    "rule": {
+      "type": "suffix",
+      "pattern": "000"
+    }
+  },
+  {
+    "id": "semi-millennium",
+    "name": "Semi-Millennium",
+    "icon": "📜",
+    "tier": "epic",
+    "ep": 100000,
+    "description": "Last three digits are 500.",
+    "odds": "1 in 1,000",
+    "family": "VOID_DEPTH",
+    "sourceOrder": 204,
+    "rule": {
+      "type": "suffix",
+      "pattern": "500"
+    }
+  },
+  {
+    "id": "triple-nine",
+    "name": "Triple Nine",
+    "icon": "🎉",
+    "tier": "epic",
+    "ep": 100000,
+    "description": "Last three digits are 999.",
+    "odds": "1 in 1,000",
+    "family": "NINE_ENDING",
+    "sourceOrder": 179,
+    "rule": {
+      "type": "suffix",
+      "pattern": "999"
+    }
+  },
+  {
+    "id": "square",
+    "name": "2nd Power",
+    "icon": "🟦",
+    "tier": "rare",
+    "ep": 99900,
+    "description": "Some whole number multiplied by itself.",
+    "odds": "1 in 999",
+    "family": "POWER",
+    "sourceOrder": 59,
+    "rule": {
+      "type": "integerPower",
+      "exponent": 2
+    }
+  },
+  {
+    "id": "even-spacing-abs",
+    "name": "Even Spacing (Absolute)",
+    "icon": "📐",
+    "tier": "rare",
+    "ep": 90992,
+    "description": "Three or more digits that move the same distance each step, up or down.",
+    "odds": "1 in 910",
+    "family": "PROGRESSION",
+    "sourceOrder": 183,
+    "rule": {
+      "type": "spacing",
+      "minLength": 3,
+      "absolute": true
+    }
+  },
+  {
+    "id": "firefly",
+    "name": "Firefly",
+    "icon": "🪲",
+    "tier": "rare",
+    "ep": 82237,
+    "description": "At least four digits: one odd one out, all the rest identical.",
+    "odds": "1 in 822",
+    "family": "DUALITY",
+    "sourceOrder": 22,
+    "rule": {
+      "type": "firefly"
+    }
+  },
+  {
+    "id": "consec-pair-exact",
+    "name": "2 Consecutive Numbers",
+    "icon": "🔗",
+    "tier": "rare",
+    "ep": 50505,
+    "description": "Cut in two, the halves are consecutive numbers, like 1213.",
+    "odds": "1 in 505",
+    "family": "CONSECUTIVE",
+    "sourceOrder": 228,
+    "rule": {
+      "type": "consecutiveSplit",
+      "pieces": 2,
+      "mode": "ordered"
+    }
+  },
+  {
+    "id": "palindrome",
+    "name": "Palindrome",
+    "icon": "🪞",
+    "tier": "rare",
+    "ep": 50025,
+    "description": "Identical read left to right or right to left.",
+    "odds": "1 in 500",
+    "family": "PALINDROME",
+    "sourceOrder": 1,
+    "rule": {
+      "type": "palindrome"
+    }
+  },
+  {
+    "id": "deep-void-three",
+    "name": "Deep Void (3)",
+    "icon": "🌑",
+    "tier": "rare",
+    "ep": 37023,
+    "description": "Three 0s in a row somewhere.",
+    "odds": "1 in 370",
+    "family": "VOID_DEPTH",
+    "sourceOrder": 152,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "000"
+      ]
+    }
+  },
+  {
+    "id": "contiguous-quads",
+    "name": "Contiguous Quads",
+    "icon": "➖➖",
+    "tier": "rare",
+    "ep": 37023,
+    "description": "The same digit four times in a row.",
+    "odds": "1 in 370",
+    "family": "CONTIGUOUS_RUN",
+    "sourceOrder": 42,
+    "rule": {
+      "type": "run",
+      "length": 4
+    }
+  },
+  {
+    "id": "turtle",
+    "name": "Turtle",
+    "icon": "🐢",
+    "tier": "rare",
+    "ep": 36049,
+    "description": "Neighbouring digits are never more than one apart.",
+    "odds": "1 in 360",
+    "family": "PROGRESSION",
+    "sourceOrder": 21,
+    "rule": {
+      "type": "neighborDistance",
+      "max": 1,
+      "minLength": 2,
+      "whole": true
+    }
+  },
+  {
+    "id": "secret-agent",
+    "name": "Secret Agent",
+    "icon": "🕶️",
+    "tier": "rare",
+    "ep": 34614,
+    "description": "Has 007 in it.",
+    "odds": "1 in 346",
+    "family": null,
+    "sourceOrder": 138,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "007"
+      ]
+    }
+  },
+  {
+    "id": "heavy",
+    "name": "Heavy",
+    "icon": "🧱",
+    "tier": "rare",
+    "ep": 33300,
+    "description": "Its digits add up to more than 45.",
+    "odds": "1 in 333",
+    "family": null,
+    "sourceOrder": 2,
+    "rule": {
+      "type": "digitSum",
+      "relation": ">",
+      "value": 45
+    }
+  },
+  {
+    "id": "contiguous-boat",
+    "name": "Contiguous Full House",
+    "icon": "🏰",
+    "tier": "rare",
+    "ep": 30111,
+    "description": "A block of three or more of one digit right next to a block of two or more of another.",
+    "odds": "1 in 301",
+    "family": "BOAT",
+    "sourceOrder": 93,
+    "rule": {
+      "type": "contiguousboat"
+    }
+  },
+  {
+    "id": "jackpot",
+    "name": "Jackpot",
+    "icon": "💰",
+    "tier": "rare",
+    "ep": 27027,
+    "description": "Has 777 in it.",
+    "odds": "1 in 270",
+    "family": "JACKPOT",
+    "sourceOrder": 102,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "777"
+      ]
+    }
+  },
+  {
+    "id": "devil",
+    "name": "Devil",
+    "icon": "😈",
+    "tier": "rare",
+    "ep": 27027,
+    "description": "Has 666 in it.",
+    "odds": "1 in 270",
+    "family": "DEVIL",
+    "sourceOrder": 111,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "666"
+      ]
+    }
+  },
+  {
+    "id": "sequence-4",
+    "name": "Sequence (4)",
+    "icon": "🔢",
+    "tier": "rare",
+    "ep": 25907,
+    "description": "Four digits in a row counting up or down by one.",
+    "odds": "1 in 259",
+    "family": "PROGRESSION",
+    "sourceOrder": 156,
+    "rule": {
+      "type": "sequence",
+      "length": 4
+    }
+  },
+  {
+    "id": "error",
+    "name": "Error 404",
+    "icon": "🚫",
+    "tier": "rare",
+    "ep": 25132,
+    "description": "Has 404 in it.",
+    "odds": "1 in 251",
+    "family": "ERROR",
+    "sourceOrder": 127,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "404"
+      ]
+    }
+  },
+  {
+    "id": "orientation",
+    "name": "Orientation",
+    "icon": "🧭",
+    "tier": "rare",
+    "ep": 25132,
+    "description": "Has 101 in it, like an intro course.",
+    "odds": "1 in 251",
+    "family": "ORIENTATION",
+    "sourceOrder": 211,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "101"
+      ]
+    }
+  },
+  {
+    "id": "pi-contains-3",
+    "name": "Pi Slice (3)",
+    "icon": "🥧",
+    "tier": "rare",
+    "ep": 25006,
+    "description": "Has 314 in it.",
+    "odds": "1 in 250",
+    "family": "PI",
+    "sourceOrder": 189,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "314"
+      ]
+    }
+  },
+  {
+    "id": "e-contains-3",
+    "name": "E Slice (3)",
+    "icon": "📈",
+    "tier": "rare",
+    "ep": 25006,
+    "description": "Has 271 in it.",
+    "odds": "1 in 250",
+    "family": "E",
+    "sourceOrder": 193,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "271"
+      ]
+    }
+  },
+  {
+    "id": "botanist",
+    "name": "Botanist",
+    "icon": "🌿",
+    "tier": "rare",
+    "ep": 25006,
+    "description": "Has 420 in it.",
+    "odds": "1 in 250",
+    "family": "BOTANIST",
+    "sourceOrder": 109,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "420"
+      ]
+    }
+  },
+  {
+    "id": "emergency",
+    "name": "Emergency",
+    "icon": "🚑",
+    "tier": "rare",
+    "ep": 25006,
+    "description": "Has 911 in it.",
+    "odds": "1 in 250",
+    "family": "EMERGENCY",
+    "sourceOrder": 125,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "911"
+      ]
+    }
+  },
+  {
+    "id": "calendar",
+    "name": "Calendar",
+    "icon": "📅",
+    "tier": "rare",
+    "ep": 25006,
+    "description": "Has 365 in it, one for every day of the year.",
+    "odds": "1 in 250",
+    "family": "CALENDAR",
+    "sourceOrder": 213,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "365"
+      ]
+    }
+  },
+  {
+    "id": "divisible-by-three",
+    "name": "Divisible by Three",
+    "icon": "🔺",
+    "tier": "rare",
+    "ep": 24414,
+    "description": "Every digit is 0, 3, 6 or 9.",
+    "odds": "1 in 244",
+    "family": null,
+    "sourceOrder": 186,
+    "rule": {
+      "type": "allDigits",
+      "digits": "0369"
+    }
+  },
+  {
+    "id": "scramble",
+    "name": "Scramble",
+    "icon": "🔀",
+    "tier": "rare",
+    "ep": 22722,
+    "description": "Sort the digits and they count up by one with no gaps or repeats.",
+    "odds": "1 in 227",
+    "family": "PROGRESSION",
+    "sourceOrder": 158,
+    "rule": {
+      "type": "scramble",
+      "minLength": 2
+    }
+  },
+  {
+    "id": "duality",
+    "name": "Duality",
+    "icon": "☯️",
+    "tier": "rare",
+    "ep": 21654,
+    "description": "Built from exactly two different digits.",
+    "odds": "1 in 217",
+    "family": "DUALITY",
+    "sourceOrder": 46,
+    "rule": {
+      "type": "uniqueDigits",
+      "count": 2
+    }
+  },
+  {
+    "id": "steps",
+    "name": "Steps",
+    "icon": "🪜",
+    "tier": "rare",
+    "ep": 20202,
+    "description": "Digits only go up or stay level, rising at least once.",
+    "odds": "1 in 202",
+    "family": "MONOTONIC",
+    "sourceOrder": 28,
+    "rule": {
+      "type": "monotonic",
+      "direction": 1,
+      "strict": false
+    }
+  },
+  {
+    "id": "arithmetic",
+    "name": "Metronome",
+    "icon": "🎼",
+    "tier": "rare",
+    "ep": 17784,
+    "description": "Cut into three or more numbers that go up or down by the same gap (bigger than 1).",
+    "odds": "1 in 178",
+    "family": "PROGRESSION",
+    "sourceOrder": 231,
+    "rule": {
+      "type": "progressionSplit",
+      "mode": "arithmetic"
+    }
+  },
+  {
+    "id": "framed-double",
+    "name": "Framed Double",
+    "icon": "🖼️🖼️🖼️",
+    "tier": "rare",
+    "ep": 15242,
+    "description": "Six digits: two different doubled digits in the middle, with different digits on each end.",
+    "odds": "1 in 152",
+    "family": "PAIRS",
+    "sourceOrder": 58,
+    "rule": {
+      "type": "framedDouble"
+    }
+  },
+  {
+    "id": "slopes",
+    "name": "Slopes",
+    "icon": "🛝",
+    "tier": "rare",
+    "ep": 12582,
+    "description": "Digits only go down or stay level, falling at least once.",
+    "odds": "1 in 126",
+    "family": "MONOTONIC",
+    "sourceOrder": 29,
+    "rule": {
+      "type": "monotonic",
+      "direction": -1,
+      "strict": false
+    }
+  },
+  {
+    "id": "paired-bookends",
+    "name": "Paired Bookends",
+    "icon": "👐",
+    "tier": "rare",
+    "ep": 11122,
+    "description": "Opens with a doubled digit and closes with a different doubled digit.",
+    "odds": "1 in 111",
+    "family": "BOOKENDS",
+    "sourceOrder": 185,
+    "rule": {
+      "type": "bookends",
+      "mode": "pairs"
+    }
+  },
+  {
+    "id": "four-digits",
+    "name": "Four Digits",
+    "icon": "🍀",
+    "tier": "rare",
+    "ep": 11111,
+    "description": "A roll from 1,000 to 9,999.",
+    "odds": "1 in 111",
+    "family": null,
+    "sourceOrder": 175,
+    "rule": {
+      "type": "length",
+      "length": 4
+    }
+  },
+  {
+    "id": "three-pair",
+    "name": "Three Pair",
+    "icon": "👯‍♀️👯",
+    "tier": "rare",
+    "ep": 10288,
+    "description": "Three different digits each appear exactly twice.",
+    "odds": "1 in 103",
+    "family": "PAIRS",
+    "sourceOrder": 87,
+    "rule": {
+      "type": "frequency",
+      "count": 2,
+      "groups": 3
+    }
+  },
+  {
+    "id": "bookends",
+    "name": "Bookends",
+    "icon": "📚",
+    "tier": "rare",
+    "ep": 10010,
+    "description": "The opening two digits reappear as the closing two.",
+    "odds": "1 in 100",
+    "family": "BOOKENDS",
+    "sourceOrder": 25,
+    "rule": {
+      "type": "bookends",
+      "mode": "same"
+    }
+  },
+  {
+    "id": "mirror-bookends",
+    "name": "Mirror Bookends",
+    "icon": "📖",
+    "tier": "rare",
+    "ep": 10010,
+    "description": "The closing two digits are the opening two flipped around.",
+    "odds": "1 in 100",
+    "family": "BOOKENDS",
+    "sourceOrder": 184,
+    "rule": {
+      "type": "bookends",
+      "mode": "reverse"
+    }
+  },
+  {
+    "id": "century",
+    "name": "Century",
+    "icon": "💯",
+    "tier": "rare",
+    "ep": 10000,
+    "description": "Last two digits are 00.",
+    "odds": "1 in 100",
+    "family": "VOID_DEPTH",
+    "sourceOrder": 11,
+    "rule": {
+      "type": "suffix",
+      "pattern": "00"
+    }
+  },
+  {
+    "id": "semi-century",
+    "name": "Semi-Century",
+    "icon": "🗓️",
+    "tier": "rare",
+    "ep": 10000,
+    "description": "Last two digits are 50.",
+    "odds": "1 in 100",
+    "family": "VOID_DEPTH",
+    "sourceOrder": 202,
+    "rule": {
+      "type": "suffix",
+      "pattern": "50"
+    }
+  },
+  {
+    "id": "quarter-century",
+    "name": "Quarter-Century",
+    "icon": "🪙",
+    "tier": "rare",
+    "ep": 10000,
+    "description": "Last two digits are 25.",
+    "odds": "1 in 100",
+    "family": null,
+    "sourceOrder": 201,
+    "rule": {
+      "type": "suffix",
+      "pattern": "25"
+    }
+  },
+  {
+    "id": "three-quarter-century",
+    "name": "Three-Quarter Century",
+    "icon": "🕰️",
+    "tier": "rare",
+    "ep": 10000,
+    "description": "Last two digits are 75.",
+    "odds": "1 in 100",
+    "family": null,
+    "sourceOrder": 203,
+    "rule": {
+      "type": "suffix",
+      "pattern": "75"
+    }
+  },
+  {
+    "id": "double-nine",
+    "name": "Double Nine",
+    "icon": "🎈",
+    "tier": "rare",
+    "ep": 10000,
+    "description": "Last two digits are 99.",
+    "odds": "1 in 100",
+    "family": "NINE_ENDING",
+    "sourceOrder": 178,
+    "rule": {
+      "type": "suffix",
+      "pattern": "99"
+    }
+  },
+  {
+    "id": "quads",
+    "name": "Four of a Kind",
+    "icon": "🍀",
+    "tier": "uncommon",
+    "ep": 8436,
+    "description": "Some digit appears four or more times.",
+    "odds": "1 in 84",
+    "family": "OF_A_KIND",
+    "sourceOrder": 90,
+    "rule": {
+      "type": "frequency",
+      "count": 4,
+      "atLeast": true
+    }
+  },
+  {
+    "id": "equation",
+    "name": "Equation",
+    "icon": "🟰",
+    "tier": "uncommon",
+    "ep": 7720,
+    "description": "Cut into three numbers a, b, c so that a + b, a − b, a × b or a ÷ b equals c.",
+    "odds": "1 in 77",
+    "family": null,
+    "sourceOrder": 78,
+    "rule": {
+      "type": "equation"
+    }
+  },
+  {
+    "id": "low-ball",
+    "name": "Low Ball",
+    "icon": "📉",
+    "tier": "uncommon",
+    "ep": 6400,
+    "description": "Every digit is between 0 and 4.",
+    "odds": "1 in 64",
+    "family": null,
+    "sourceOrder": 98,
+    "rule": {
+      "type": "allDigits",
+      "digits": "01234"
+    }
+  },
+  {
+    "id": "mountain",
+    "name": "Mountain",
+    "icon": "🏔️",
+    "tier": "uncommon",
+    "ep": 5885,
+    "description": "Digits climb strictly to a single peak, then drop strictly.",
+    "odds": "1 in 59",
+    "family": "PEAK",
+    "sourceOrder": 32,
+    "rule": {
+      "type": "peak",
+      "direction": 1,
+      "strict": true
+    }
+  },
+  {
+    "id": "double-hop",
+    "name": "Double Hop",
+    "icon": "🦘🦘",
+    "tier": "uncommon",
+    "ep": 5321,
+    "description": "A digit skips one place and lands again, three times in a row.",
+    "odds": "1 in 53",
+    "family": "HOPSCOTCH",
+    "sourceOrder": 54,
+    "rule": {
+      "type": "hop",
+      "count": 3
+    }
+  },
+  {
+    "id": "high-roller",
+    "name": "High Roller",
+    "icon": "🤑",
+    "tier": "uncommon",
+    "ep": 5120,
+    "description": "Every digit is between 5 and 9.",
+    "odds": "1 in 51",
+    "family": null,
+    "sourceOrder": 99,
+    "rule": {
+      "type": "allDigits",
+      "digits": "56789"
+    }
+  },
+  {
+    "id": "valley",
+    "name": "Valley",
+    "icon": "🏜️",
+    "tier": "uncommon",
+    "ep": 4199,
+    "description": "Digits drop strictly to a single low point, then climb strictly.",
+    "odds": "1 in 42",
+    "family": "PEAK",
+    "sourceOrder": 33,
+    "rule": {
+      "type": "peak",
+      "direction": -1,
+      "strict": true
+    }
+  },
+  {
+    "id": "contiguous-two-pair",
+    "name": "Contiguous Two Pair",
+    "icon": "👨‍👩‍👧‍👦",
+    "tier": "uncommon",
+    "ep": 3957,
+    "description": "Two different doubled digits back to back, like 3377.",
+    "odds": "1 in 40",
+    "family": "PAIRS",
+    "sourceOrder": 86,
+    "rule": {
+      "type": "adjacentPairs",
+      "groups": 2
+    }
+  },
+  {
+    "id": "mini-echo",
+    "name": "Mini Echo",
+    "icon": "🔂",
+    "tier": "uncommon",
+    "ep": 3704,
+    "description": "Two digits immediately repeated, like 4545.",
+    "odds": "1 in 37",
+    "family": "REPEAT",
+    "sourceOrder": 39,
+    "rule": {
+      "type": "repeat",
+      "adjacent": true,
+      "length": 2
+    }
+  },
+  {
+    "id": "flush",
+    "name": "Flush",
+    "icon": "🎨",
+    "tier": "uncommon",
+    "ep": 2845,
+    "description": "Every digit is even, or every digit is odd.",
+    "odds": "1 in 28",
+    "family": null,
+    "sourceOrder": 95,
+    "rule": {
+      "type": "sameParity"
+    }
+  },
+  {
+    "id": "alternator",
+    "name": "Alternator",
+    "icon": "⚡",
+    "tier": "uncommon",
+    "ep": 2845,
+    "description": "Digits switch between odd and even at every step.",
+    "odds": "1 in 28",
+    "family": null,
+    "sourceOrder": 51,
+    "rule": {
+      "type": "alternateParity"
+    }
+  },
+  {
+    "id": "deep-void",
+    "name": "Deep Void",
+    "icon": "🕳️",
+    "tier": "uncommon",
+    "ep": 2784,
+    "description": "Two 0s side by side somewhere.",
+    "odds": "1 in 28",
+    "family": "VOID_DEPTH",
+    "sourceOrder": 151,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "00"
+      ]
+    }
+  },
+  {
+    "id": "contiguous-trips",
+    "name": "Contiguous Trips",
+    "icon": "➖",
+    "tier": "uncommon",
+    "ep": 2784,
+    "description": "The same digit three times in a row.",
+    "odds": "1 in 28",
+    "family": "CONTIGUOUS_RUN",
+    "sourceOrder": 41,
+    "rule": {
+      "type": "run",
+      "length": 3
+    }
+  },
+  {
+    "id": "feather",
+    "name": "Feather",
+    "icon": "🪶",
+    "tier": "uncommon",
+    "ep": 2667,
+    "description": "Its digits add up to less than 15.",
+    "odds": "1 in 27",
+    "family": null,
+    "sourceOrder": 8,
+    "rule": {
+      "type": "digitSum",
+      "relation": "<",
+      "value": 15
+    }
+  },
+  {
+    "id": "blackjack",
+    "name": "Blackjack",
+    "icon": "♠️",
+    "tier": "uncommon",
+    "ep": 2521,
+    "description": "Its digits add up to exactly 21.",
+    "odds": "1 in 25",
+    "family": null,
+    "sourceOrder": 107,
+    "rule": {
+      "type": "digitSum",
+      "relation": "=",
+      "value": 21
+    }
+  },
+  {
+    "id": "boat",
+    "name": "Full House",
+    "icon": "🏠",
+    "tier": "uncommon",
+    "ep": 2397,
+    "description": "One digit at least three times plus another at least twice.",
+    "odds": "1 in 24",
+    "family": "BOAT",
+    "sourceOrder": 92,
+    "rule": {
+      "type": "boat"
+    }
+  },
+  {
+    "id": "pocket-mirror",
+    "name": "Pocket Mirror",
+    "icon": "🪞",
+    "tier": "uncommon",
+    "ep": 2124,
+    "description": "Hides a palindrome at least 4 digits long.",
+    "odds": "1 in 21",
+    "family": "PALINDROME",
+    "sourceOrder": 38,
+    "rule": {
+      "type": "palindrome",
+      "substring": true,
+      "minLength": 4
+    }
+  },
+  {
+    "id": "snake-eyes",
+    "name": "Snake Eyes",
+    "icon": "🎲",
+    "tier": "uncommon",
+    "ep": 2121,
+    "description": "Two 1s, and no other digit appears more than once.",
+    "odds": "1 in 21",
+    "family": null,
+    "sourceOrder": 100,
+    "rule": {
+      "type": "snakeeyes"
+    }
+  },
+  {
+    "id": "nice",
+    "name": "Nice",
+    "icon": "😏",
+    "tier": "uncommon",
+    "ep": 2024,
+    "description": "Has 69 in it.",
+    "odds": "1 in 20",
+    "family": "NICE",
+    "sourceOrder": 4,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "69"
+      ]
+    }
+  },
+  {
+    "id": "meaning",
+    "name": "Meaning of Life",
+    "icon": "🌌",
+    "tier": "uncommon",
+    "ep": 2024,
+    "description": "Has 42 in it.",
+    "odds": "1 in 20",
+    "family": "BOTANIST",
+    "sourceOrder": 123,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "42"
+      ]
+    }
+  },
+  {
+    "id": "sixty-seven",
+    "name": "Six-Seven",
+    "icon": "🫠",
+    "tier": "uncommon",
+    "ep": 2024,
+    "description": "Has 67 in it.",
+    "odds": "1 in 20",
+    "family": "SIXTY_SEVEN",
+    "sourceOrder": 207,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "67"
+      ]
+    }
+  },
+  {
+    "id": "eighty-six",
+    "name": "Eighty-Six",
+    "icon": "🍽️",
+    "tier": "uncommon",
+    "ep": 2024,
+    "description": "Has 86 in it, kitchen slang for \"we're out\".",
+    "odds": "1 in 20",
+    "family": "EIGHTY_SIX",
+    "sourceOrder": 209,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "86"
+      ]
+    }
+  },
+  {
+    "id": "balanced",
+    "name": "Balanced",
+    "icon": "⚖️",
+    "tier": "uncommon",
+    "ep": 1959,
+    "description": "An even number of digits, with both halves adding up to the same total.",
+    "odds": "1 in 20",
+    "family": null,
+    "sourceOrder": 187,
+    "rule": {
+      "type": "balanced"
+    }
+  },
+  {
+    "id": "rhyme",
+    "name": "Rhyme",
+    "icon": "🎶",
+    "tier": "uncommon",
+    "ep": 1872,
+    "description": "The same chunk of 2+ digits shows up twice without overlapping.",
+    "odds": "1 in 19",
+    "family": "REPEAT",
+    "sourceOrder": 40,
+    "rule": {
+      "type": "repeat",
+      "minLength": 2
+    }
+  },
+  {
+    "id": "sequence-3",
+    "name": "Sequence (3)",
+    "icon": "🔢",
+    "tier": "uncommon",
+    "ep": 1716,
+    "description": "Three digits in a row counting up or down by one.",
+    "odds": "1 in 17",
+    "family": "PROGRESSION",
+    "sourceOrder": 155,
+    "rule": {
+      "type": "sequence",
+      "length": 3
+    }
+  },
+  {
+    "id": "consec-pair-adjacent",
+    "name": "2 Consecutive Numbers (Contains)",
+    "icon": "🔗",
+    "tier": "uncommon",
+    "ep": 1659,
+    "description": "Somewhere inside, a number is followed directly by the next or previous number.",
+    "odds": "1 in 17",
+    "family": "CONSECUTIVE",
+    "sourceOrder": 229,
+    "rule": {
+      "type": "consecutiveSplit",
+      "pieces": 2,
+      "mode": "contains"
+    }
+  },
+  {
+    "id": "consec-pair-nearby",
+    "name": "2 Consecutive Numbers (Nearby)",
+    "icon": "🔗",
+    "tier": "uncommon",
+    "ep": 1575,
+    "description": "Two separate pieces of the roll, with a gap between them, are one apart.",
+    "odds": "1 in 16",
+    "family": "CONSECUTIVE",
+    "sourceOrder": 230,
+    "rule": {
+      "type": "consecutiveSplit",
+      "pieces": 2,
+      "mode": "nearby"
+    }
+  },
+  {
+    "id": "mesa",
+    "name": "Mesa",
+    "icon": "🗻",
+    "tier": "uncommon",
+    "ep": 1568,
+    "description": "Digits go up, then down, with level stretches allowed but no second climb.",
+    "odds": "1 in 16",
+    "family": "PEAK",
+    "sourceOrder": 34,
+    "rule": {
+      "type": "peak",
+      "direction": 1,
+      "strict": false
+    }
+  },
+  {
+    "id": "prime",
+    "name": "Prime Number",
+    "icon": "💎",
+    "tier": "uncommon",
+    "ep": 1274,
+    "description": "Only 1 and itself divide it evenly.",
+    "odds": "1 in 13",
+    "family": null,
+    "sourceOrder": 0,
+    "rule": {
+      "type": "prime"
+    }
+  },
+  {
+    "id": "trinity",
+    "name": "Trinity",
+    "icon": "⚜️",
+    "tier": "uncommon",
+    "ep": 1265,
+    "description": "Built from exactly three different digits.",
+    "odds": "1 in 13",
+    "family": null,
+    "sourceOrder": 47,
+    "rule": {
+      "type": "uniqueDigits",
+      "count": 3
+    }
+  },
+  {
+    "id": "dozen",
+    "name": "Dozen",
+    "icon": "🍩",
+    "tier": "uncommon",
+    "ep": 1200,
+    "description": "A positive multiple of 12.",
+    "odds": "1 in 12",
+    "family": null,
+    "sourceOrder": 15,
+    "rule": {
+      "type": "multiple",
+      "divisor": 12,
+      "positive": true
+    }
+  },
+  {
+    "id": "canyon",
+    "name": "Canyon",
+    "icon": "🌄",
+    "tier": "uncommon",
+    "ep": 1184,
+    "description": "Digits go down, then up, with level stretches allowed but no second drop.",
+    "odds": "1 in 12",
+    "family": "PEAK",
+    "sourceOrder": 35,
+    "rule": {
+      "type": "peak",
+      "direction": -1,
+      "strict": false
+    }
+  },
+  {
+    "id": "five-digits",
+    "name": "Five Digits",
+    "icon": "🖐️",
+    "tier": "uncommon",
+    "ep": 1111,
+    "description": "A roll from 10,000 to 99,999.",
+    "odds": "1 in 11",
+    "family": null,
+    "sourceOrder": 176,
+    "rule": {
+      "type": "length",
+      "length": 5
+    }
+  },
+  {
+    "id": "eleven",
+    "name": "Eleven",
+    "icon": "🕚",
+    "tier": "uncommon",
+    "ep": 1100,
+    "description": "A positive multiple of 11.",
+    "odds": "1 in 11",
+    "family": null,
+    "sourceOrder": 17,
+    "rule": {
+      "type": "multiple",
+      "divisor": 11,
+      "positive": true
+    }
+  },
+  {
+    "id": "harshad",
+    "name": "Harshad Number",
+    "icon": "🤝",
+    "tier": "uncommon",
+    "ep": 1048,
+    "description": "Divides evenly by the sum of its own digits.",
+    "odds": "1 in 10",
+    "family": null,
+    "sourceOrder": 80,
+    "rule": {
+      "type": "harshad"
+    }
+  },
+  {
+    "id": "clean",
+    "name": "Clean",
+    "icon": "🧼",
+    "tier": "uncommon",
+    "ep": 1000,
+    "description": "Last digit is 0.",
+    "odds": "1 in 10",
+    "family": "VOID_DEPTH",
+    "sourceOrder": 9,
+    "rule": {
+      "type": "suffix",
+      "pattern": "0"
+    }
+  },
+  {
+    "id": "semi-clean",
+    "name": "Semi-Clean",
+    "icon": "🧹",
+    "tier": "uncommon",
+    "ep": 1000,
+    "description": "Last digit is 5.",
+    "odds": "1 in 10",
+    "family": null,
+    "sourceOrder": 10,
+    "rule": {
+      "type": "suffix",
+      "pattern": "5"
+    }
+  },
+  {
+    "id": "equilibrium",
+    "name": "Equilibrium",
+    "icon": "🧘",
+    "tier": "uncommon",
+    "ep": 1000,
+    "description": "Starts and ends with the same digit.",
+    "odds": "1 in 10",
+    "family": "EQUILIBRIUM",
+    "sourceOrder": 20,
+    "rule": {
+      "type": "endpoints",
+      "relation": "=",
+      "minLength": 2
+    }
+  },
+  {
+    "id": "sandwich",
+    "name": "Sandwich",
+    "icon": "🥪",
+    "tier": "uncommon",
+    "ep": 1000,
+    "description": "Same digit at both ends, with something different in between.",
+    "odds": "1 in 10",
+    "family": "EQUILIBRIUM",
+    "sourceOrder": 24,
+    "rule": {
+      "type": "endpoints",
+      "relation": "=",
+      "differentMiddle": true,
+      "minLength": 3
+    }
+  },
+  {
+    "id": "hills",
+    "name": "Hills",
+    "icon": "🏞️",
+    "tier": "common",
+    "ep": 733,
+    "description": "At least four digits that zigzag up, down, up… with no repeats side by side.",
+    "odds": "1 in 7",
+    "family": "HILLS",
+    "sourceOrder": 36,
+    "rule": {
+      "type": "zigzag",
+      "minLength": 4
+    }
+  },
+  {
+    "id": "trips",
+    "name": "Three of a Kind",
+    "icon": "🎰",
+    "tier": "common",
+    "ep": 724,
+    "description": "Some digit appears exactly three times.",
+    "odds": "1 in 7",
+    "family": "OF_A_KIND",
+    "sourceOrder": 89,
+    "rule": {
+      "type": "frequency",
+      "count": 3
+    }
+  },
+  {
+    "id": "lucky-seven-div",
+    "name": "Lucky Seven (Divisible)",
+    "icon": "🎰",
+    "tier": "common",
+    "ep": 700,
+    "description": "A positive multiple of 7.",
+    "odds": "1 in 7",
+    "family": null,
+    "sourceOrder": 16,
+    "rule": {
+      "type": "multiple",
+      "divisor": 7,
+      "positive": true
+    }
+  },
+  {
+    "id": "heterogeneous",
+    "name": "Heterogeneous",
+    "icon": "🥗",
+    "tier": "common",
+    "ep": 593,
+    "description": "No digit is used twice.",
+    "odds": "1 in 6",
+    "family": null,
+    "sourceOrder": 49,
+    "rule": {
+      "type": "uniqueDigits",
+      "allDistinct": true
+    }
+  },
+  {
+    "id": "mini-scramble",
+    "name": "Mini Scramble",
+    "icon": "🧩",
+    "tier": "common",
+    "ep": 579,
+    "description": "Three or more side-by-side digits that count up by one once sorted.",
+    "odds": "1 in 6",
+    "family": "PROGRESSION",
+    "sourceOrder": 159,
+    "rule": {
+      "type": "scramble",
+      "minLength": 3,
+      "substring": true
+    }
+  },
+  {
+    "id": "gap-one",
+    "name": "Gap One",
+    "icon": "↕️",
+    "tier": "common",
+    "ep": 529,
+    "description": "First and last digits are one apart.",
+    "odds": "1 in 5",
+    "family": null,
+    "sourceOrder": 161,
+    "rule": {
+      "type": "endpoints",
+      "gap": 1,
+      "minLength": 2
+    }
+  },
+  {
+    "id": "two-pair",
+    "name": "Two Pair",
+    "icon": "👯‍♀️",
+    "tier": "common",
+    "ep": 377,
+    "description": "Two different digits each appear at least twice.",
+    "odds": "1 in 4",
+    "family": "PAIRS",
+    "sourceOrder": 85,
+    "rule": {
+      "type": "frequency",
+      "count": 2,
+      "atLeast": true,
+      "groups": 2
+    }
+  },
+  {
+    "id": "dunes",
+    "name": "Dunes",
+    "icon": "🐫",
+    "tier": "common",
+    "ep": 364,
+    "description": "Zigzags up and down once you ignore level stretches, with at least four turns’ worth of digits.",
+    "odds": "1 in 4",
+    "family": "HILLS",
+    "sourceOrder": 37,
+    "rule": {
+      "type": "zigzag",
+      "minLength": 4,
+      "ignoreEqual": true
+    }
+  },
+  {
+    "id": "hopscotch",
+    "name": "Hopscotch",
+    "icon": "🦘",
+    "tier": "common",
+    "ep": 312,
+    "description": "A digit skips one place and lands again, exactly twice in that pattern.",
+    "odds": "1 in 3",
+    "family": "HOPSCOTCH",
+    "sourceOrder": 53,
+    "rule": {
+      "type": "hop",
+      "count": 2,
+      "exact": true
+    }
+  },
+  {
+    "id": "ghost",
+    "name": "Ghost",
+    "icon": "👻",
+    "tier": "common",
+    "ep": 309,
+    "description": "Exactly one 0.",
+    "odds": "1 in 3",
+    "family": null,
+    "sourceOrder": 150,
+    "rule": {
+      "type": "digitCount",
+      "digit": "0",
+      "count": 1
+    }
+  },
+  {
+    "id": "quartet",
+    "name": "Quartet",
+    "icon": "🎻",
+    "tier": "common",
+    "ep": 290,
+    "description": "Built from exactly four different digits.",
+    "odds": "1 in 3",
+    "family": null,
+    "sourceOrder": 48,
+    "rule": {
+      "type": "uniqueDigits",
+      "count": 4
+    }
+  },
+  {
+    "id": "hydrogen",
+    "name": "Hydrogen (1)",
+    "icon": "💧",
+    "tier": "common",
+    "ep": 282,
+    "description": "Exactly one 1.",
+    "odds": "1 in 3",
+    "family": null,
+    "sourceOrder": 141,
+    "rule": {
+      "type": "digitCount",
+      "digit": "1",
+      "count": 1
+    }
+  },
+  {
+    "id": "helium",
+    "name": "Helium (2)",
+    "icon": "🎈",
+    "tier": "common",
+    "ep": 282,
+    "description": "Exactly one 2.",
+    "odds": "1 in 3",
+    "family": null,
+    "sourceOrder": 142,
+    "rule": {
+      "type": "digitCount",
+      "digit": "2",
+      "count": 1
+    }
+  },
+  {
+    "id": "lithium",
+    "name": "Lithium (3)",
+    "icon": "🔋",
+    "tier": "common",
+    "ep": 282,
+    "description": "Exactly one 3.",
+    "odds": "1 in 3",
+    "family": null,
+    "sourceOrder": 145,
+    "rule": {
+      "type": "digitCount",
+      "digit": "3",
+      "count": 1
+    }
+  },
+  {
+    "id": "beryllium",
+    "name": "Beryllium (4)",
+    "icon": "💎",
+    "tier": "common",
+    "ep": 282,
+    "description": "Exactly one 4.",
+    "odds": "1 in 3",
+    "family": null,
+    "sourceOrder": 146,
+    "rule": {
+      "type": "digitCount",
+      "digit": "4",
+      "count": 1
+    }
+  },
+  {
+    "id": "boron",
+    "name": "Boron (5)",
+    "icon": "🧼",
+    "tier": "common",
+    "ep": 282,
+    "description": "Exactly one 5.",
+    "odds": "1 in 3",
+    "family": null,
+    "sourceOrder": 147,
+    "rule": {
+      "type": "digitCount",
+      "digit": "5",
+      "count": 1
+    }
+  },
+  {
+    "id": "carbon",
+    "name": "Carbon (6)",
+    "icon": "✏️",
+    "tier": "common",
+    "ep": 282,
+    "description": "Exactly one 6.",
+    "odds": "1 in 3",
+    "family": null,
+    "sourceOrder": 143,
+    "rule": {
+      "type": "digitCount",
+      "digit": "6",
+      "count": 1
+    }
+  },
+  {
+    "id": "nitrogen",
+    "name": "Nitrogen (7)",
+    "icon": "❄️",
+    "tier": "common",
+    "ep": 282,
+    "description": "Exactly one 7.",
+    "odds": "1 in 3",
+    "family": null,
+    "sourceOrder": 148,
+    "rule": {
+      "type": "digitCount",
+      "digit": "7",
+      "count": 1
+    }
+  },
+  {
+    "id": "oxygen",
+    "name": "Oxygen (8)",
+    "icon": "💨",
+    "tier": "common",
+    "ep": 282,
+    "description": "Exactly one 8.",
+    "odds": "1 in 3",
+    "family": null,
+    "sourceOrder": 144,
+    "rule": {
+      "type": "digitCount",
+      "digit": "8",
+      "count": 1
+    }
+  },
+  {
+    "id": "fluorine",
+    "name": "Fluorine (9)",
+    "icon": "🦷",
+    "tier": "common",
+    "ep": 282,
+    "description": "Exactly one 9.",
+    "odds": "1 in 3",
+    "family": null,
+    "sourceOrder": 149,
+    "rule": {
+      "type": "digitCount",
+      "digit": "9",
+      "count": 1
+    }
+  },
+  {
+    "id": "grounded",
+    "name": "Grounded",
+    "icon": "⚓",
+    "tier": "common",
+    "ep": 250,
+    "description": "Starts with a smaller digit than it ends with.",
+    "odds": "1 in 3",
+    "family": null,
+    "sourceOrder": 18,
+    "rule": {
+      "type": "endpoints",
+      "relation": "<",
+      "minLength": 2
+    }
+  },
+  {
+    "id": "contiguous-pair",
+    "name": "Contiguous Pair",
+    "icon": "🫂",
+    "tier": "common",
+    "ep": 249,
+    "description": "The same digit twice side by side.",
+    "odds": "1 in 2",
+    "family": "PAIRS",
+    "sourceOrder": 84,
+    "rule": {
+      "type": "run",
+      "length": 2
+    }
+  },
+  {
+    "id": "lucky-7",
+    "name": "Lucky Seven",
+    "icon": "7️⃣",
+    "tier": "common",
+    "ep": 213,
+    "description": "Has a 7 in it.",
+    "odds": "1 in 2",
+    "family": null,
+    "sourceOrder": 101,
+    "rule": {
+      "type": "contains",
+      "patterns": [
+        "7"
+      ]
+    }
+  },
+  {
+    "id": "even",
+    "name": "Even",
+    "icon": "⚖️",
+    "tier": "common",
+    "ep": 200,
+    "description": "An even number.",
+    "odds": "1 in 2",
+    "family": null,
+    "sourceOrder": 6,
+    "rule": {
+      "type": "multiple",
+      "divisor": 2
+    }
+  },
+  {
+    "id": "odd",
+    "name": "Odd",
+    "icon": "🦄",
+    "tier": "common",
+    "ep": 200,
+    "description": "An odd number.",
+    "odds": "1 in 2",
+    "family": null,
+    "sourceOrder": 7,
+    "rule": {
+      "type": "remainder",
+      "divisor": 2,
+      "remainder": 1
+    }
+  },
+  {
+    "id": "liftoff",
+    "name": "Liftoff",
+    "icon": "🚀",
+    "tier": "common",
+    "ep": 200,
+    "description": "Starts with a bigger digit than it ends with.",
+    "odds": "1 in 2",
+    "family": null,
+    "sourceOrder": 19,
+    "rule": {
+      "type": "endpoints",
+      "relation": ">",
+      "minLength": 2
+    }
+  },
+  {
+    "id": "void",
+    "name": "Void",
+    "icon": "🕳️",
+    "tier": "common",
+    "ep": 167,
+    "description": "Not a single 0 anywhere.",
+    "odds": "1 in 2",
+    "family": null,
+    "sourceOrder": 3,
+    "rule": {
+      "type": "noDigits",
+      "digits": "0"
+    }
+  },
+  {
+    "id": "neighbors",
+    "name": "Neighbors",
+    "icon": "🏘️",
+    "tier": "common",
+    "ep": 161,
+    "description": "Two side-by-side digits that are one apart.",
+    "odds": "1 in 2",
+    "family": null,
+    "sourceOrder": 160,
+    "rule": {
+      "type": "neighborDistance",
+      "exact": 1
+    }
+  },
+  {
+    "id": "pair",
+    "name": "Pair",
+    "icon": "👯",
+    "tier": "common",
+    "ep": 120,
+    "description": "Some digit appears at least twice.",
+    "odds": "1 in 2",
+    "family": "PAIRS",
+    "sourceOrder": 83,
+    "rule": {
+      "type": "frequency",
+      "count": 2,
+      "atLeast": true
+    }
+  },
+  {
+    "id": "six-digits",
+    "name": "Six Digits",
+    "icon": "🐝",
+    "tier": "common",
+    "ep": 111,
+    "description": "A roll from 100,000 to 999,999.",
+    "odds": "1 in 2",
+    "family": null,
+    "sourceOrder": 177,
+    "rule": {
+      "type": "length",
+      "length": 6
+    }
+  }
+]

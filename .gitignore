@@ -149,3 +149,9 @@ vite.config.ts.timestamp-*
 .turbo
 cc_mnt/
 ARCHIVE/
+rngdle-storage/
+test-results/
+id_codex_private.txt
+id_codex_password.txt
+__pycache__/
+*.pyc

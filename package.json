@@ -1,0 +1,11 @@
+{
+  "name": "rngdle",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Daily RNGdle game for PHP and SQLite. No JavaScript build step.",
+  "scripts": {
+    "test": "node tests/badges.test.mjs",
+    "dev": "php -S 127.0.0.1:8080 -t public public/router.php"
+  }
+}
