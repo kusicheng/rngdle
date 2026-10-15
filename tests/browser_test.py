@@ -51,7 +51,8 @@ class BrowserTests(unittest.TestCase):
         self.assertEqual(200, response.status)
         self.page.wait_for_load_state("networkidle")
 
-    def mock_reveal_roll(self, hold_response=False, rarity="rare", percentile=85):
+    def mock_reveal_roll(self, hold_response=False, rarity="rare", percentile=85,
+                         roll_overrides=None):
         """Drive presentation with a fixed server result, without creating a roll."""
         catalog = json.loads((Path(__file__).resolve().parents[1] / "data/badges.json")
                              .read_text(encoding="utf-8"))
@@ -63,31 +64,55 @@ class BrowserTests(unittest.TestCase):
             badge.update(ep=ep, isScoring=scoring)
             badges.append(badge)
         initial = self.context.request.get(BASE_URL + "/api.php?action=state").json()
-        initial.update(user=None, today=None, history=[], bestRoll=None,
+        initial.update(user=None, today=None, rollers={"left": None, "right": None},
+                       history=[], bestRoll=None,
                        leaderboard={"daily": [], "weekly": [], "allTime": [], "badges": []})
         initial["stats"] = {"rolls": 0, "totalEP": 0, "bestEP": 0,
                             "averageEP": 0, "uniqueBadges": 0, "streak": 0, "badges": []}
         roll = {"id": 987654321, "value": 1000000, "ep": 25200, "badges": badges,
                 "day": initial["day"], "createdAt": initial["serverTime"],
                 "rarity": rarity, "percentile": percentile, "poem": None}
-        completed = copy.deepcopy(initial)
-        completed.update(today=roll, history=[roll])
-        completed["stats"].update(rolls=1, totalEP=roll["ep"], bestEP=roll["ep"],
-                                  averageEP=roll["ep"], uniqueBadges=len(badges),
-                                  streak=1, badges=badges)
-        fixture = {"roll": roll, "requests": 0, "pending": None, "rolled": False}
+        rolls = []
+        for index, overrides in enumerate(roll_overrides or [{}]):
+            result = copy.deepcopy(roll)
+            result.update(overrides)
+            result["id"] = roll["id"] + index
+            rolls.append(result)
+        fixture = {"roll": rolls[0], "rolls": rolls, "requests": 0,
+                   "pending": None, "pending_routes": [],
+                   "hold_state": False, "pending_states": [],
+                   "rolled": False, "state": initial}
+
+        def state_for(result, lane):
+            completed = copy.deepcopy(fixture["state"])
+            if lane == "center":
+                completed.update(today=result, history=[result])
+                completed["stats"].update(
+                    rolls=1, totalEP=result["ep"], bestEP=result["ep"],
+                    averageEP=result["ep"], uniqueBadges=len(result["badges"]),
+                    streak=1, badges=result["badges"])
+            else:
+                completed["rollers"][lane] = result
+            return completed
 
         def route_api(route):
             action = urllib.parse.parse_qs(urllib.parse.urlsplit(route.request.url).query)
             action = action.get("action", [""])[0]
             if action == "state":
-                route.fulfill(json=completed if fixture["rolled"] else initial)
+                if fixture["hold_state"]:
+                    fixture["pending_states"].append((route, copy.deepcopy(fixture["state"])))
+                else:
+                    route.fulfill(json=fixture["state"])
             elif action == "roll":
+                result = rolls[min(fixture["requests"], len(rolls) - 1)]
                 fixture["requests"] += 1
                 fixture["rolled"] = True
-                body = {"roll": roll, "state": completed, "alreadyRolled": False}
+                lane = (route.request.post_data_json or {}).get("roller", "center")
+                fixture["state"] = state_for(result, lane)
+                body = {"roll": result, "state": fixture["state"], "alreadyRolled": False}
                 if hold_response:
                     fixture["pending"] = (route, body)
+                    fixture["pending_routes"].append((route, body))
                 else:
                     route.fulfill(json=body)
             else:
@@ -96,11 +121,15 @@ class BrowserTests(unittest.TestCase):
         self.page.route("**/api.php?action=*", route_api)
         return fixture
 
-    def wait_for_reveal(self):
-        card = self.page.locator(".home.result .roll-card").first
+    def wait_for_reveal(self, root=None):
+        root = root if root is not None else self.page
+        card = root.locator(".home.result .roll-card").first
         expect(card).to_be_visible()
         expect(card).to_have_attribute("aria-busy", "false", timeout=60000)
         return card
+
+    def roller(self, name="center"):
+        return self.page.locator(f'.roller-panel[data-roller="{name}"]')
 
     def test_guest_can_generate_repeatedly_and_reload_keeps_latest_result(self):
         self.page.add_init_script("localStorage.setItem('rngdle_motion', 'reduced')")
@@ -192,6 +221,11 @@ class BrowserTests(unittest.TestCase):
             expect(self.page.locator("#account-nav")).to_contain_text(username)
             expect(self.page.get_by_test_id("roll-value")).to_have_text(number)
             expect(self.page.get_by_test_id("roll-button")).to_be_disabled()
+            count = self.page.get_by_label("Rollers", exact=True)
+            expect(count).to_have_value("1")
+            expect(count.locator('option[value="2"]')).to_have_attribute("disabled", "")
+            expect(count.locator('option[value="3"]')).to_have_attribute("disabled", "")
+            expect(self.page.locator(".roller-panel")).to_have_count(1)
             self.page.reload()
             expect(self.page.get_by_test_id("roll-button")).to_be_disabled()
             expect(self.page.get_by_test_id("roll-value")).to_have_text(number)
@@ -495,6 +529,247 @@ class BrowserTests(unittest.TestCase):
         card = self.wait_for_reveal()
         expect(card.locator("[data-testid=roll-value]")).to_have_text("1000000")
         self.assertEqual(1, fixture["requests"])
+
+    def test_early_reroll_cancels_only_its_lane_and_never_restores_old_result(self):
+        catalog = json.loads((Path(__file__).resolve().parents[1] / "data/badges.json")
+                             .read_text(encoding="utf-8"))
+        even = copy.deepcopy(next(b for b in catalog if b["id"] == "even"))
+        even.update(ep=200, isScoring=True)
+        fixture = self.mock_reveal_roll(roll_overrides=[
+            {"value": 91}, {"value": 82},
+            {"value": 7, "ep": 200, "badges": [even]}])
+        self.visit()
+        self.page.get_by_label("Rollers", exact=True).select_option("2")
+        center, left = self.roller(), self.roller("left")
+        center.get_by_test_id("roll-button").click()
+        center_card = center.locator(".home.result .roll-card")
+        expect(center_card).to_have_attribute("data-reveal-phase", "digits", timeout=5000)
+        expect(center.get_by_test_id("roll-button")).to_be_hidden()
+        self.page.evaluate("window.oldCenterCard = document.querySelector('[data-roller=center] .roll-card')")
+
+        # A second section may start while the first number is still resolving.
+        left.get_by_test_id("roll-button").click()
+        self.assertTrue(self.page.evaluate("window.oldCenterCard === document.querySelector('[data-roller=center] .roll-card')"))
+        expect(center_card).not_to_have_attribute("data-reveal-phase", "spinning")
+        expect(left.locator(".roll-card")).to_have_attribute("aria-busy", "true")
+        self.page.evaluate("window.otherLaneCard = document.querySelector('[data-roller=left] .roll-card')")
+
+        # Roll again becomes actionable at the number pop, before badges finish.
+        expect(center_card).to_have_attribute("data-reveal-phase", "pop", timeout=10000)
+        again = center.get_by_test_id("roll-button")
+        expect(again).to_be_visible()
+        expect(again).to_be_enabled()
+        expect(again).to_have_text("Roll again")
+        layout = center.evaluate("""lane => {
+          const percentile = lane.querySelector('.rarity-percentile').getBoundingClientRect();
+          const button = lane.querySelector('[data-testid=roll-button]').getBoundingClientRect();
+          return {percentileBottom: percentile.bottom, buttonTop: button.top};
+        }""")
+        self.assertGreaterEqual(layout["buttonTop"], layout["percentileBottom"])
+        self.assertLess(layout["buttonTop"] - layout["percentileBottom"], 60,
+                        "Roll again should sit directly beneath the percentile")
+        expect(center_card.locator(".roll-badge:visible").first).to_be_visible(timeout=5000)
+        expect(center_card).to_have_attribute("aria-busy", "true")
+        again.click()
+        self.assertEqual(3, fixture["requests"])
+        self.assertTrue(self.page.evaluate("window.otherLaneCard === document.querySelector('[data-roller=left] .roll-card')"))
+        self.page.evaluate("window.cancelledCardHTML = window.oldCenterCard.innerHTML")
+        center_card = self.wait_for_reveal(center)
+        left_card = self.wait_for_reveal(left)
+        expect(center_card.get_by_test_id("roll-value")).to_have_text("7")
+        expect(center_card.get_by_test_id("roll-ep")).to_have_text("200")
+        expect(center_card.locator(".roll-badge")).to_have_count(1)
+        expect(left_card.get_by_test_id("roll-value")).to_have_text("82")
+        expect(left_card.get_by_test_id("roll-ep")).to_have_text("25,200")
+        self.assertTrue(self.page.evaluate("""() =>
+          !window.oldCenterCard.isConnected &&
+          window.oldCenterCard.innerHTML === window.cancelledCardHTML"""),
+                        "Cancelled EP/badge jobs must stop touching the discarded card")
+
+    def test_roller_count_preserves_center_and_mobile_sections_fit(self):
+        fixture = self.mock_reveal_roll(roll_overrides=[
+            {"value": 1000000}, {"value": 888888}, {"value": 999999}])
+        self.page.add_init_script("localStorage.setItem('rngdle_motion', 'reduced')")
+        self.visit()
+        count = self.page.get_by_label("Rollers", exact=True)
+        expect(count).to_have_value("1")
+        expect(self.page.locator(".roller-panel")).to_have_count(1)
+        center = self.roller()
+        center.get_by_test_id("roll-button").click()
+        self.wait_for_reveal(center)
+        self.page.evaluate("window.centerCard = document.querySelector('[data-roller=center] .roll-card')")
+        count.select_option("2")
+        expect(self.page.locator(".roller-panel")).to_have_count(2)
+        self.roller("left").get_by_test_id("roll-button").click()
+        self.wait_for_reveal(self.roller("left"))
+        count.select_option("3")
+        expect(self.page.locator(".roller-panel")).to_have_count(3)
+        self.roller("right").get_by_test_id("roll-button").click()
+        self.wait_for_reveal(self.roller("right"))
+        for lane, number in (("center", "1000000"), ("left", "888888"),
+                             ("right", "999999")):
+            expect(self.roller(lane).get_by_test_id("roll-value")).to_have_text(number)
+        self.assertTrue(self.page.evaluate("window.centerCard === document.querySelector('[data-roller=center] .roll-card')"))
+        positions = self.page.locator(".roller-panel").evaluate_all("""lanes =>
+          lanes.map(lane => ({id: lane.dataset.roller,
+            x: lane.getBoundingClientRect().x, y: lane.getBoundingClientRect().y}))""")
+        self.assertEqual(["left", "center", "right"], [p["id"] for p in positions])
+        self.assertEqual(3, len({round(p["x"]) for p in positions}),
+                         "Desktop rollers should occupy separate columns")
+        self.assertLess(max(p["y"] for p in positions) - min(p["y"] for p in positions), 2)
+        for width in (390, 320):
+            self.page.set_viewport_size({"width": width, "height": 844})
+            for value in ("1", "2", "3"):
+                count.select_option(value)
+                expect(self.page.locator(".roller-panel")).to_have_count(int(value))
+                self.assertTrue(self.page.evaluate(
+                    "document.documentElement.scrollWidth <= window.innerWidth"),
+                    f"{value} rollers must fit a {width}px phone")
+                expect(center.get_by_test_id("roll-value")).to_have_text("1000000")
+                self.assertTrue(self.page.evaluate("window.centerCard === document.querySelector('[data-roller=center] .roll-card')"))
+        self.assertEqual(3, fixture["requests"], "Changing the count must never generate a roll")
+
+    def test_removed_lane_request_cannot_repaint_center_or_reappear(self):
+        fixture = self.mock_reveal_roll(hold_response=True, roll_overrides=[
+            {"value": 61}, {"value": 72}])
+        self.page.add_init_script("localStorage.setItem('rngdle_motion', 'reduced')")
+        self.visit()
+        center = self.roller()
+        center.get_by_test_id("roll-button").click()
+        route, body = fixture["pending"]
+        route.fulfill(json=body)
+        self.wait_for_reveal(center)
+        self.page.get_by_label("Rollers", exact=True).select_option("2")
+        self.roller("left").get_by_test_id("roll-button").click()
+        route, body = fixture["pending"]
+        self.page.get_by_label("Rollers", exact=True).select_option("1")
+        expect(self.roller("left")).to_have_count(0)
+        route.fulfill(json=body)
+        self.page.wait_for_timeout(1100)
+        expect(self.page.locator(".roller-panel")).to_have_count(1)
+        expect(center.get_by_test_id("roll-value")).to_have_text("61")
+        expect(center.get_by_test_id("roll-ep")).to_have_text("25,200")
+        self.assertEqual(2, fixture["requests"])
+
+    def test_late_response_from_another_lane_cannot_undo_newer_saved_state(self):
+        fixture = self.mock_reveal_roll(hold_response=True, roll_overrides=[
+            {"value": 61}, {"value": 72}])
+        self.page.add_init_script("localStorage.setItem('rngdle_motion', 'reduced')")
+        self.visit()
+        self.page.get_by_label("Rollers", exact=True).select_option("2")
+        self.roller().get_by_test_id("roll-button").click()
+        self.roller("left").get_by_test_id("roll-button").click()
+        self.assertEqual(2, len(fixture["pending_routes"]))
+        center_pending, left_pending = fixture["pending_routes"]
+        route, body = left_pending
+        route.fulfill(json=body)
+        self.wait_for_reveal(self.roller("left"))
+        route, body = center_pending
+        route.fulfill(json=body)
+        self.wait_for_reveal(self.roller())
+        self.page.locator('.bottom-nav a[href="/badges"]').click()
+        expect(self.page.get_by_role("heading", name="All badges", exact=True)).to_be_visible()
+        self.page.locator(".brand").click()
+        expect(self.roller().get_by_test_id("roll-value")).to_have_text("61")
+        expect(self.roller("left").get_by_test_id("roll-value")).to_have_text("72")
+        self.assertEqual(2, fixture["requests"])
+
+    def test_navigation_cancels_every_visible_lane_reveal(self):
+        fixture = self.mock_reveal_roll(roll_overrides=[
+            {"value": 31}, {"value": 42}, {"value": 53}])
+        self.visit()
+        self.page.get_by_label("Rollers", exact=True).select_option("3")
+        for lane in ("center", "left", "right"):
+            self.roller(lane).get_by_test_id("roll-button").click()
+        expect(self.page.locator('.roller-panel .roll-card[aria-busy="true"]')).to_have_count(3)
+        self.page.evaluate("window.oldLaneCards = [...document.querySelectorAll('.roller-panel .roll-card')]")
+        self.page.locator('.bottom-nav a[href="/badges"]').click()
+        expect(self.page.get_by_role("heading", name="All badges", exact=True)).to_be_visible()
+        self.page.evaluate("window.cancelledLaneHTML = window.oldLaneCards.map(card => card.innerHTML)")
+        self.page.wait_for_timeout(1500)
+        self.assertTrue(self.page.evaluate("""() => window.oldLaneCards.every((card, index) =>
+          !card.isConnected && card.innerHTML === window.cancelledLaneHTML[index])"""),
+                        "Navigation must stop animation jobs in every discarded lane")
+        expect(self.page.get_by_role("heading", name="All badges", exact=True)).to_be_visible()
+        self.page.locator(".brand").click()
+        center_card = self.wait_for_reveal(self.roller())
+        expect(center_card.get_by_test_id("roll-value")).to_have_text("31")
+        self.assertEqual(3, fixture["requests"])
+
+    def test_side_breakdown_badge_and_matching_roll_keep_their_lane(self):
+        catalog = json.loads((Path(__file__).resolve().parents[1] / "data/badges.json")
+                             .read_text(encoding="utf-8"))
+        overrides = []
+        for value, badge_id in ((74, "even"), (83, "prime"), (100, "clean")):
+            badge = copy.deepcopy(next(b for b in catalog if b["id"] == badge_id))
+            badge["isScoring"] = True
+            overrides.append({"value": value, "ep": badge["ep"], "badges": [badge]})
+        fixture = self.mock_reveal_roll(roll_overrides=overrides)
+        self.page.add_init_script("localStorage.setItem('rngdle_motion', 'reduced')")
+        self.visit()
+        self.page.get_by_label("Rollers", exact=True).select_option("3")
+        for lane in ("center", "left", "right"):
+            self.roller(lane).get_by_test_id("roll-button").click()
+            self.wait_for_reveal(self.roller(lane))
+        self.roller("left").get_by_role("button", name="EP breakdown", exact=True).click()
+        dialog = self.page.locator("#detail-dialog")
+        expect(dialog.locator(".breakdown-total")).to_contain_text("1,274 EP")
+        dialog.locator('.breakdown [data-badge="prime"]').click()
+        expect(dialog.locator(".badge-detail")).to_contain_text("Earned 1 time")
+        expect(dialog.locator(".history-row .mono")).to_have_text("83")
+        expect(dialog.locator(".history-row")).to_have_count(1)
+        dialog.locator(".history-row").click()
+        expect(dialog.get_by_test_id("roll-value")).to_have_text("83")
+        dialog.locator('.roll-card [data-badge="prime"]').click()
+        expect(dialog.locator(".badge-detail")).to_contain_text("Earned 1 time")
+        expect(dialog.locator(".history-row .mono")).to_have_text("83")
+
+        # Closing a side detail must not leak its context into the main catalog.
+        dialog.locator(".dialog-close").click()
+        self.page.locator('.bottom-nav a[href="/badges"]').click()
+        self.page.locator('.badge-card[data-badge="prime"]').click()
+        expect(dialog.locator(".badge-detail")).to_contain_text("Not discovered yet")
+        expect(dialog.locator(".history-row")).to_have_count(0)
+        self.assertEqual(3, fixture["requests"])
+
+    def check_background_state_race(self, animated):
+        fixture = self.mock_reveal_roll(roll_overrides=[{"value": 74}, {"value": 85}])
+        self.page.add_init_script("localStorage.setItem('rngdle_motion', 'reduced')")
+        self.visit()
+        center = self.roller()
+        center.get_by_test_id("roll-button").click()
+        self.wait_for_reveal(center)
+        fixture["hold_state"] = True
+        with self.page.expect_request("**/api.php?action=state"):
+            self.page.evaluate("document.dispatchEvent(new Event('visibilitychange'))")
+        self.page.wait_for_timeout(100)
+        self.assertEqual(1, len(fixture["pending_states"]))
+        fixture["hold_state"] = False
+        if animated:
+            self.page.evaluate("localStorage.setItem('rngdle_motion', 'normal')")
+        center.get_by_test_id("roll-button").click()
+        card = center.locator(".home.result .roll-card")
+        if animated:
+            expect(card).to_have_attribute("data-reveal-phase", "digits", timeout=5000)
+        else:
+            self.wait_for_reveal(center)
+            expect(card.get_by_test_id("roll-value")).to_have_text("85")
+        self.page.evaluate("window.newRollCard = document.querySelector('[data-roller=center] .roll-card')")
+        route, old_state = fixture["pending_states"][0]
+        self.assertEqual(74, old_state["today"]["value"])
+        route.fulfill(json=old_state)
+        self.page.wait_for_timeout(200)
+        self.assertTrue(self.page.evaluate("window.newRollCard === document.querySelector('[data-roller=center] .roll-card')"),
+                        "An old background state response must preserve the current reveal")
+        card = self.wait_for_reveal(center)
+        expect(card.get_by_test_id("roll-value")).to_have_text("85")
+        self.assertEqual(2, fixture["requests"])
+
+    def test_old_background_state_cannot_replace_a_new_roll_reveal(self):
+        self.check_background_state_race(animated=True)
+
+    def test_old_background_state_cannot_replace_a_new_completed_roll(self):
+        self.check_background_state_race(animated=False)
 
     def test_percentile_is_large_colored_and_below_rarity_word(self):
         self.page.add_init_script("localStorage.setItem('rngdle_motion', 'reduced')")

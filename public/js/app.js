@@ -1,4 +1,4 @@
-import { request, setCsrf, publicProfile } from "./api.js";
+import { request, setCsrf, publicProfile } from "./api.js?v=multi-roll-1";
 import {
   format,
   escapeHTML as e,
@@ -9,11 +9,11 @@ import {
   toast,
   applyTheme,
   copyText,
-} from "./ui.js?v=badge-cards-1";
-import * as views from "./views.js?v=badge-cards-1";
+} from "./ui.js?v=multi-roll-1";
+import * as views from "./views.js?v=multi-roll-1";
 import { authPage, settings } from "./account.js";
 import { poetry, wordsFor } from "./poetry.js";
-import { revealRoll } from "./reveal.js?v=badge-cards-1";
+import { createRollers } from "./rollers.js?v=multi-roll-1";
 
 const main = document.querySelector("#main");
 const dialog = document.querySelector("#detail-dialog");
@@ -27,12 +27,18 @@ let filters = {
 };
 let composer = { words: [], filter: "", variant: 0, rollId: null };
 let profileData = null,
-  rolling = false,
+  refreshing = false,
   clockOffset = 0,
   navigation = 0;
-let revealController = null;
+let rollers = null;
+let poetryContext = null;
+let detailRolls = null;
+let dialogRollContext = null;
+let stateRevision = 0;
 
 function updateState(state) {
+  stateRevision++;
+  if (ctx.state?.user?.id !== state.user?.id) poetryContext = null;
   ctx.state = state;
   setCsrf(state.csrf);
   clockOffset = Date.parse(state.serverTime) - Date.now();
@@ -42,19 +48,37 @@ function updateState(state) {
     : '<a class="button small" href="/signin" data-link>⇥ Sign in</a>';
 }
 async function refresh() {
-  updateState(await request("state"));
+  const session = ctx.state?.csrf;
+  const revision = stateRevision;
+  const state = await request("state");
+  if (
+    (session && ctx.state?.csrf !== session) ||
+    revision !== stateRevision ||
+    rollers?.isBusy()
+  )
+    return false;
+  updateState(state);
+  return true;
 }
 export function navigate(path) {
   history.pushState({}, "", path);
-  render();
+  render({ refreshState: true });
   window.scrollTo(0, 0);
 }
-async function render() {
+async function render({ refreshState = false } = {}) {
   if (!ctx.state) return;
-  revealController?.abort();
-  revealController = null;
+  rollers?.dispose();
+  rollers = null;
   const marker = ++navigation,
     path = location.pathname.replace(/\/$/, "") || "/";
+  if (refreshState) {
+    try {
+      await refresh();
+    } catch (error) {
+      toast(error.message);
+    }
+    if (marker !== navigation) return;
+  }
   const params = new URLSearchParams(location.search);
   document
     .querySelectorAll(".bottom-nav a")
@@ -68,12 +92,14 @@ async function render() {
           .replace(/^./, (s) => s.toUpperCase()) + " · RNGdle"
   }`;
   profileData = null;
+  detailRolls = null;
+  dialogRollContext = null;
   if (path === "/") {
     if (params.get("action") === "verifyEmail")
       main.innerHTML = authPage("verify", params.get("token") || "");
     else if (params.get("action") === "resetPassword")
       main.innerHTML = authPage("reset", params.get("token") || "");
-    else main.innerHTML = views.home(ctx);
+    else mountHome();
   } else if (path === "/badges")
     main.innerHTML = views.catalog(
       ctx,
@@ -88,15 +114,19 @@ async function render() {
   else if (path === "/settings") main.innerHTML = settings(ctx);
   else if (path === "/about") main.innerHTML = views.about(ctx);
   else if (path === "/poetry") {
-    if (composer.rollId !== (ctx.state.today?.id ?? null)) {
+    const selectedRoll = poetryContext?.roll || ctx.state.today;
+    if (composer.rollId !== (selectedRoll?.id ?? null)) {
       composer = {
-        words: ctx.state.today?.poem ? ctx.state.today.poem.split(" ") : [],
+        words: selectedRoll?.poem ? selectedRoll.poem.split(" ") : [],
         filter: "",
         variant: 0,
-        rollId: ctx.state.today?.id ?? null,
+        rollId: selectedRoll?.id ?? null,
       };
     }
-    main.innerHTML = poetry(ctx, composer);
+    main.innerHTML = poetry(
+      { ...ctx, state: { ...ctx.state, today: selectedRoll } },
+      composer,
+    );
   } else if (
     [
       "/signin",
@@ -139,16 +169,58 @@ async function render() {
       '<section class="page empty-state"><h1>Page not found</h1><a class="button" href="/" data-link>Back to the game</a></section>';
   countdown();
 }
-function openDialog(html) {
+function mountHome() {
+  const preference = Number(localStorage.getItem("rngdle_rollers")) || 1;
+  const count = ctx.state.user
+    ? 1
+    : Math.max(1, Math.min(3, Math.round(preference)));
+  main.innerHTML = views.homePage(ctx, count);
+  rollers = createRollers({
+    host: main.querySelector(".roller-grid"),
+    getState: () => ctx.state,
+    count,
+    request,
+    onState: updateState,
+    onError: (error) => toast(error.message),
+    onAction: (name, roll, roller) => action(name, null, roll, roller),
+    renderPanel: ({ id, roll, state }) => {
+      const title = {
+        center: "Main roller",
+        left: "Left roller",
+        right: "Right roller",
+      }[id];
+      return `<h2 class="roller-label">${title}</h2>${views.home(
+        { ...ctx, state: { ...state, today: roll || null } },
+        { auxiliary: id !== "center" },
+      )}`;
+    },
+  });
+  rollers.mount();
+}
+function openDialog(html, rollContext = null) {
+  dialogRollContext = rollContext;
   document.querySelector("#dialog-content").innerHTML = html;
   if (!dialog.open) dialog.showModal();
 }
-function showBadge(id) {
+function showBadge(id, panelRoll = null) {
   const badge = ctx.catalog.find(
     (b) => b.id === id || b.id === id?.replaceAll("_", "-"),
   );
   if (!badge) return;
-  const data = profileData || ctx.state;
+  detailRolls = panelRoll ? [panelRoll] : null;
+  const data = panelRoll
+    ? {
+        history: [panelRoll],
+        stats: {
+          badges: panelRoll.badges.map((badge) => ({
+            ...badge,
+            count: 1,
+            firstEarned: panelRoll.createdAt,
+            lastEarned: panelRoll.createdAt,
+          })),
+        },
+      }
+    : profileData || ctx.state;
   const earned = data.stats.badges?.find((b) => b.id === badge.id),
     count = earned?.count || 0,
     level = badgeLevel(count);
@@ -165,6 +237,7 @@ function showBadge(id) {
   );
   openDialog(
     `<div class="badge-detail tier-${e(badge.tier)}"><span class="detail-icon">${e(badge.icon)}</span><h2>${e(badge.name)}</h2><p>${e(badge.description)}</p><div class="detail-metrics"><span><strong>${format(badge.ep)}</strong> EP</span><span>${e(badge.odds)}</span><span class="tier-label">${e(badge.tier)}</span></div>${badge.family ? `<p class="small-note">Family: ${e(badge.family.toLowerCase().replaceAll("_", " "))}. Only the highest EP badge in this family scores.</p>` : ""}<hr><h3>${count ? "Level " + level.level : "Not discovered yet"}</h3><p>Earned ${format(count)} time${count === 1 ? "" : "s"}${count ? ` · first earned ${dateLabel(earned.firstEarned)}` : ""}</p><div class="progress-track"><div style="width:${level.progress * 100}%"></div></div><p class="small-note">${count ? `${Math.max(0, level.next - count)} more to the next level.` : "Your next roll could unlock this badge."}</p>${matching.length ? `<h3>Matching rolls</h3><div class="history-list">${matching.map((r) => `<button class="history-row panel" data-roll="${r.id}"><span>${dateLabel(r.day)}</span><strong class="mono">${r.value}</strong><strong>${format(r.ep)} EP</strong></button>`).join("")}</div>` : ""}</div>`,
+    panelRoll,
   );
   if (count) {
     const contribution = document.createElement("p");
@@ -173,12 +246,13 @@ function showBadge(id) {
   }
 }
 function showRoll(id) {
-  const roll = (profileData?.history || ctx.state.history).find(
+  const roll = (detailRolls || profileData?.history || ctx.state.history).find(
     (r) => String(r.id) === String(id),
   );
   if (!roll) return;
   openDialog(
     `<h2>Roll · ${dateLabel(roll.day)}</h2>${rollCard(roll)}${roll.poem ? `<p class="poem-line">${e(roll.poem)}</p>` : ""}<h3>EP breakdown</h3>${breakdown(roll)}`,
+    detailRolls ? roll : null,
   );
 }
 function breakdown(roll) {
@@ -200,92 +274,29 @@ function countdown() {
   document
     .querySelectorAll("[data-countdown]")
     .forEach((el) => (el.textContent = text));
-  if (left === 0 && !rolling && document.visibilityState === "visible") {
-    rolling = true;
+  if (
+    left === 0 &&
+    !refreshing &&
+    !rollers?.isBusy() &&
+    document.visibilityState === "visible"
+  ) {
+    refreshing = true;
     refresh()
-      .then(() => render())
+      .then((updated) => updated && render())
       .catch(() => {})
-      .finally(() => (rolling = false));
+      .finally(() => (refreshing = false));
   }
 }
-async function generate() {
-  if (rolling || (ctx.state.user && ctx.state.today)) return;
-  rolling = true;
-  const button = main.querySelector('[data-action="roll"]');
-  button.disabled = true;
-  button.textContent = "Rolling…";
-  const reduce =
-    localStorage.getItem("rngdle_motion") === "reduced" ||
-    matchMedia("(prefers-reduced-motion:reduce)").matches;
-  if (!reduce)
-    main
-      .querySelector(".roll-card .roll-number")
-      ?.classList.add("number-unrevealed");
-  const startedNavigation = navigation;
-  let timer;
-  if (!reduce)
-    timer = setInterval(() => {
-      const el = main.querySelector(".unknown-number");
-      if (el)
-        el.textContent = String(Math.floor(Math.random() * 1000000)).padStart(
-          6,
-          "0",
-        );
-    }, 60);
+async function action(
+  name,
+  target = null,
+  selectedRoll = null,
+  selectedRoller = "center",
+) {
   try {
-    const start = Date.now(),
-      result = await request("roll", {});
-    if (!reduce)
-      await new Promise((resolve) =>
-        setTimeout(resolve, Math.max(0, 800 - (Date.now() - start))),
-      );
-    updateState(result.state || (await request("state")));
-    clearInterval(timer);
-    const stayedOnRoll =
-      startedNavigation === navigation && location.pathname === "/";
-    await render();
-    if (stayedOnRoll && !result.alreadyRolled && ctx.state.today) {
-      await presentRoll(ctx.state.today, reduce);
-    }
-  } catch (error) {
-    toast(error.message);
-    render();
-  } finally {
-    clearInterval(timer);
-    rolling = false;
-  }
-}
-async function presentRoll(roll, reducedMotion) {
-  const controller = new AbortController();
-  revealController = controller;
-  try {
-    return await revealRoll(main, roll, {
-      signal: controller.signal,
-      reducedMotion,
-    });
-  } finally {
-    if (revealController === controller) revealController = null;
-  }
-}
-async function action(name) {
-  try {
-    if (name === "roll") return await generate();
-    if (name === "replay") {
-      if (rolling || !ctx.state.today || location.pathname !== "/") return;
-      rolling = true;
-      try {
-        await presentRoll(
-          ctx.state.today,
-          localStorage.getItem("rngdle_motion") === "reduced" ||
-            matchMedia("(prefers-reduced-motion:reduce)").matches,
-        );
-      } finally {
-        rolling = false;
-      }
-      return;
-    }
+    if (!selectedRoll && rollers?.handleAction(name, target)) return;
     if (name === "share") {
-      const r = ctx.state.today;
+      const r = selectedRoll || ctx.state.today;
       return copyText(
         `RNGdle · ${r.day}\n${r.value} · ${format(r.ep)} EP\n${r.badges
           .slice(0, 8)
@@ -293,10 +304,14 @@ async function action(name) {
           .join(" ")}\n${r.poem || ""}\n${location.origin}`,
       );
     }
-    if (name === "breakdown")
+    if (name === "breakdown") {
+      const sideRoll = selectedRoller === "center" ? null : selectedRoll;
+      detailRolls = sideRoll ? [sideRoll] : null;
       return openDialog(
-        `<h2>Your EP breakdown</h2><p class="muted">Every badge is earned. The best badge in each family scores.</p>${breakdown(ctx.state.today)}`,
+        `<h2>Your EP breakdown</h2><p class="muted">Every badge is earned. The best badge in each family scores.</p>${breakdown(selectedRoll || ctx.state.today)}`,
+        sideRoll,
       );
+    }
     if (name === "logout") {
       const result = await request("logout", {});
       updateState(result.state || (await request("state")));
@@ -330,7 +345,9 @@ async function action(name) {
     if (name === "poem-shuffle") {
       const available = [
         ...new Set(
-          ctx.state.today.badges.flatMap((b) => wordsFor(b, composer.variant)),
+          (poetryContext?.roll || ctx.state.today).badges.flatMap((b) =>
+            wordsFor(b, composer.variant),
+          ),
         ),
       ];
       for (let i = available.length - 1; i > 0; i--) {
@@ -342,14 +359,21 @@ async function action(name) {
     if (name === "poem-variants") composer.variant++;
     if (name === "poem-share")
       return copyText(
-        `${composer.words.join(" ")}\nRNGdle · ${ctx.state.today.value} · ${format(ctx.state.today.ep)} EP`,
+        `${composer.words.join(" ")}\nRNGdle · ${(poetryContext?.roll || ctx.state.today).value} · ${format((poetryContext?.roll || ctx.state.today).ep)} EP`,
       );
     if (name === "poem-save") {
       const result = await request("savePoem", {
-        rollId: ctx.state.today.id,
+        rollId: (poetryContext?.roll || ctx.state.today).id,
+        roller: poetryContext?.roller || "center",
         text: composer.words.join(" "),
       });
       updateState(result.state || (await request("state")));
+      if (poetryContext) {
+        poetryContext.roll =
+          poetryContext.roller === "center"
+            ? ctx.state.today
+            : ctx.state.rollers?.[poetryContext.roller];
+      }
       toast("Poem saved to your roll.");
     }
     render();
@@ -364,10 +388,22 @@ document.addEventListener("click", (event) => {
     if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey)
       return;
     event.preventDefault();
+    if (target.getAttribute("href") === "/poetry") {
+      const roll = rollers?.activeRoll(target);
+      poetryContext = roll ? { roll, roller: rollers.laneId(target) } : null;
+    }
     if (dialog.open) dialog.close();
     navigate(target.getAttribute("href"));
-  } else if (target.dataset.action) action(target.dataset.action);
-  else if (target.dataset.badge) showBadge(target.dataset.badge);
+  } else if (target.dataset.action) action(target.dataset.action, target);
+  else if (target.dataset.badge)
+    showBadge(
+      target.dataset.badge,
+      target.closest("#detail-dialog")
+        ? dialogRollContext
+        : rollers?.laneId(target) !== "center"
+          ? rollers?.activeRoll(target)
+          : null,
+    );
   else if (target.dataset.roll) showRoll(target.dataset.roll);
   else if (target.hasAttribute("data-tier")) {
     filters.tier = target.dataset.tier;
@@ -419,6 +455,12 @@ main.addEventListener("input", (event) => {
   }
 });
 main.addEventListener("change", (event) => {
+  if (event.target.id === "roller-count" && rollers) {
+    const count = rollers.setCount(ctx.state.user ? 1 : event.target.value);
+    main.querySelector(".rollers-page").dataset.rollerCount = count;
+    event.target.value = String(count);
+    if (!ctx.state.user) localStorage.setItem("rngdle_rollers", String(count));
+  }
   if (event.target.id === "theme-select") applyTheme(event.target.value);
   if (event.target.id === "reduce-motion")
     localStorage.setItem(
@@ -476,15 +518,19 @@ main.addEventListener("submit", async (event) => {
     button.disabled = false;
   }
 });
-window.addEventListener("popstate", render);
+window.addEventListener("popstate", () => render({ refreshState: true }));
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
   if ((localStorage.getItem("rngdle_theme") || "system") === "system")
     applyTheme("system");
 });
 document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState === "visible" && !rolling)
+  if (
+    document.visibilityState === "visible" &&
+    !refreshing &&
+    !rollers?.isBusy()
+  )
     refresh()
-      .then(render)
+      .then((updated) => updated && render())
       .catch(() => {});
 });
 // Establish the session cookie first. Parallel first requests can create two sessions.

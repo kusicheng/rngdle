@@ -4,6 +4,7 @@ export function setCsrf(token) {
   csrf = token || "";
 }
 export async function request(action, data) {
+  const startingCsrf = csrf;
   const query = new URLSearchParams({ action });
   const write = data !== undefined;
   const response = await fetch(`/api.php?${query}`, {
@@ -26,8 +27,11 @@ export async function request(action, data) {
         result.message ||
         "Something went wrong. Please try again.",
     );
-  if (result.csrf) setCsrf(result.csrf);
-  if (result.state?.csrf) setCsrf(result.state.csrf);
+  // A slow roll response must not restore a token from before a later sign-in.
+  if (csrf === startingCsrf) {
+    if (result.csrf) setCsrf(result.csrf);
+    if (result.state?.csrf) setCsrf(result.state.csrf);
+  }
   return result;
 }
 export async function publicProfile(username) {

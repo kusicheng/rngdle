@@ -48,7 +48,12 @@ function rarityLine(roll, tier) {
 }
 export function rollCard(
   roll,
-  { compact = false, username = "", showRarity = false } = {},
+  {
+    compact = false,
+    username = "",
+    showRarity = false,
+    rollAgain = false,
+  } = {},
 ) {
   const tier = String(
     roll.rarity?.tier || roll.rarity?.label || roll.rarity || "common",
@@ -65,7 +70,7 @@ export function rollCard(
       "",
     )}${compact && badges.length > 5 ? `<span class="muted">+${badges.length - 5} more</span>` : ""}</div>`;
   return `<article class="roll-card ${compact ? "compact" : ""} tier-${escapeHTML(tier)}" aria-busy="false" data-reveal-phase="complete">
-    ${compact ? number : `<div class="roll-summary">${number}${ep}${showRarity ? rarityLine(roll, tier) : ""}</div>`}
+    ${compact ? number : `<div class="roll-summary">${number}${ep}${showRarity ? rarityLine(roll, tier) : ""}${rollAgain ? '<div class="roll-again-slot"><button class="generate generate-again" data-action="roll" data-testid="roll-button">Roll again</button></div>' : ""}</div>`}
     ${username ? `<p class="roll-by">rolled by <a href="/u/${encodeURIComponent(username)}" data-link>${escapeHTML(username)}</a></p>` : ""}
     ${badgeList}${compact ? ep : ""}
   </article>`;

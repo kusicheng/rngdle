@@ -53,6 +53,23 @@ function guest_identity(): string
     return $identity;
 }
 
+function requested_roller(array $input): string
+{
+    $roller = array_key_exists('roller', $input) ? $input['roller'] : 'center';
+    if (!is_string($roller) || !in_array($roller, ['center', 'left', 'right'], true)) {
+        throw new ApiError('Choose the center, left, or right roller.');
+    }
+    return $roller;
+}
+
+/** Independent guest lanes share a cookie, never a saved result or account score. */
+function guest_roller_identity(string $roller): string
+{
+    return $roller === 'center' ? guest_identity() : substr(
+        hash_hmac('sha256', 'roller:' . $roller . ':' . guest_identity(), application_secret()), 0, 32
+    );
+}
+
 function require_csrf(array $input): void
 {
     $token = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? ($input['csrf'] ?? '');

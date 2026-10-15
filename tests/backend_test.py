@@ -97,10 +97,11 @@ class BackendTests(unittest.TestCase):
         return payload
 
     def test_state_and_complete_public_catalog(self):
-        for field in ("user", "csrf", "today", "stats", "history", "leaderboard",
+        for field in ("user", "csrf", "today", "rollers", "stats", "history", "leaderboard",
                       "nextReset", "day", "serverTime"):
             self.assertIn(field, self.state)
         self.assertIsNone(self.state["today"])
+        self.assertEqual({"left": None, "right": None}, self.state["rollers"])
         self.assertEqual([], self.state["history"])
         self.assertTrue(self.state["csrf"])
         catalog = self.assert_success(self.client.request("catalog"))
@@ -154,17 +155,103 @@ class BackendTests(unittest.TestCase):
                              "Guest rerolls save only the latest result per day")
             self.assertEqual(roll["ep"], result["state"]["stats"]["totalEP"])
 
+    def test_guest_rollers_are_independent_and_only_center_counts(self):
+        expected = {}
+        ids = set()
+        for roller in ("left", "right", "center", "left", "right", "center"):
+            before = self.client.state()
+            result = self.assert_success(self.client.request("roll", {"roller": roller}))
+            self.assertFalse(result["alreadyRolled"])
+            roll = result["roll"]
+            self.assertNotIn(roll["id"], ids)
+            ids.add(roll["id"])
+            self.assertGreaterEqual(roll["value"], 0)
+            self.assertLessEqual(roll["value"], 1_000_000)
+            expected[roller] = roll
+            state = result["state"]
+            self.assertEqual(expected.get("center"), state["today"])
+            self.assertEqual({lane: expected.get(lane) for lane in ("left", "right")}, state["rollers"])
+            self.assertEqual([expected["center"]] if "center" in expected else [], state["history"])
+            self.assertEqual(expected.get("center", {}).get("ep", 0), state["stats"]["totalEP"])
+            if roller != "center":
+                self.assertEqual(before["history"], state["history"])
+                self.assertEqual(before["stats"], state["stats"])
+            reloaded = self.client.state()
+            for field in ("today", "rollers", "history", "stats"):
+                self.assertEqual(state[field], reloaded[field], "All guest lanes must survive reload")
+
+    def test_invalid_rollers_do_not_create_rolls(self):
+        for roller in (None, False, 0, [], {}, "Center", "guest", "left;DELETE"):
+            with self.subTest(roller=roller):
+                status, _ = self.client.request("roll", {"roller": roller})
+                self.assertEqual(400, status)
+                state = self.client.state()
+                self.assertIsNone(state["today"])
+                self.assertEqual({"left": None, "right": None}, state["rollers"])
+                self.assertEqual([], state["history"])
+                self.assertEqual(0, state["stats"]["rolls"])
+
+    def test_side_poems_require_the_correct_lane_and_guest(self):
+        center = self.assert_success(self.client.request("roll", {}))["roll"]
+        sides = {lane: self.assert_success(self.client.request("roll", {"roller": lane}))["roll"]
+                 for lane in ("left", "right")}
+        stranger = Client()
+        stranger.state()
+        for lane, roll in sides.items():
+            with self.subTest(lane=lane):
+                for wrong_lane in ("center", "right" if lane == "left" else "left"):
+                    status, _ = self.client.request("savePoem", {
+                        "rollId": roll["id"], "roller": wrong_lane, "text": "Wrong lane",
+                    })
+                    self.assertEqual(403, status)
+                status, _ = self.client.request("savePoem", {"rollId": roll["id"], "text": "No lane"})
+                self.assertEqual(403, status)
+                status, _ = stranger.request("savePoem", {
+                    "rollId": roll["id"], "roller": lane, "text": "Other guest",
+                })
+                self.assertEqual(403, status)
+                status, _ = self.client.request("savePoem", {
+                    "rollId": roll["id"], "roller": None, "text": "Invalid lane",
+                })
+                self.assertEqual(400, status)
+                saved = self.assert_success(self.client.request("savePoem", {
+                    "rollId": roll["id"], "roller": lane, "text": lane + " poem",
+                }))["state"]
+                self.assertEqual(lane + " poem", saved["rollers"][lane]["poem"])
+                self.assertEqual(center, saved["today"])
+                self.assertEqual([center], saved["history"])
+                cleared = self.assert_success(self.client.request("savePoem", {
+                    "rollId": roll["id"], "roller": lane, "text": "",
+                }))["state"]
+                self.assertIsNone(cleared["rollers"][lane]["poem"])
+                replacement = self.assert_success(self.client.request("roll", {"roller": lane}))["roll"]
+                self.assertNotEqual(roll["id"], replacement["id"])
+                status, _ = self.client.request("savePoem", {
+                    "rollId": roll["id"], "roller": lane, "text": "Expired roll",
+                })
+                self.assertEqual(403, status)
+
     def test_signed_in_rolls_are_once_per_account_day_across_devices(self):
         suffix = uuid.uuid4().hex[:12]
         email = f"once-{suffix}@example.test"
         password = "Test-password-" + suffix
         registered = False
         try:
+            for lane in ("left", "right"):
+                self.assert_success(self.client.request("roll", {"roller": lane}))
             self.assert_success(self.client.request("register", {
                 "username": "once" + suffix, "email": email, "password": password,
             }))
             registered = True
             self.assertIsNone(self.client.state()["today"])
+            self.assertEqual([], self.client.state()["history"], "Side rolls must never migrate to an account")
+            self.assertEqual({"left": None, "right": None}, self.client.state()["rollers"])
+            for lane in ("left", "right"):
+                status, _ = self.client.request("roll", {"roller": lane})
+                self.assertEqual(403, status)
+                status, _ = self.client.request("savePoem", {"roller": lane, "rollId": 1, "text": "Denied"})
+                self.assertEqual(403, status)
+            self.assertIsNone(self.client.state()["today"], "Forged side requests must not create account rolls")
             first = self.assert_success(self.client.request("roll", {}))
             self.assertFalse(first["alreadyRolled"])
             for _ in range(3):
@@ -237,6 +324,8 @@ class BackendTests(unittest.TestCase):
             self.assert_success(self.client.request("roll", {}))
             guest_roll = self.client.state()["today"]
             self.assertNotEqual(first_guest_roll["id"], guest_roll["id"])
+            sides = {lane: self.assert_success(self.client.request("roll", {"roller": lane}))["roll"]
+                     for lane in ("left", "right")}
             self.assert_success(self.client.request("register", {
                 "username": username, "email": email, "password": password,
             }))
@@ -247,6 +336,7 @@ class BackendTests(unittest.TestCase):
                 self.assertNotIn(secret, account["user"])
             self.assertEqual(guest_roll, account["today"])
             self.assertEqual(1, len(account["history"]))
+            self.assertEqual({"left": None, "right": None}, account["rollers"])
             self.assertEqual(guest_roll["ep"], account["stats"]["totalEP"])
             repeat = self.assert_success(self.client.request("roll", {}))
             self.assertTrue(repeat["alreadyRolled"])
@@ -302,6 +392,7 @@ class BackendTests(unittest.TestCase):
             self.assertIsNone(self.client.state()["user"])
             self.assertIsNone(self.client.state()["today"])
             self.assertEqual([], self.client.state()["history"])
+            self.assertEqual(sides, self.client.state()["rollers"], "Signing in must leave side rolls unclaimed")
             for _ in range(3):
                 reroll = self.assert_success(self.client.request("roll", {}))
                 self.assertFalse(reroll["alreadyRolled"])

@@ -5,7 +5,7 @@ import {
   badgeChip,
   badgeLevel,
   rollCard,
-} from "./ui.js?v=badge-cards-1";
+} from "./ui.js?v=multi-roll-1";
 const tiers = [
   "mythic",
   "anomaly",
@@ -18,7 +18,14 @@ const tiers = [
 export function pageHeading(title, description, back = "") {
   return `<div class="page-heading">${back ? `<a class="back-link" href="${back}" data-link>← Back</a>` : ""}<h1>${title}</h1>${description ? `<p>${description}</p>` : ""}</div>`;
 }
-export function home({ state }) {
+export function homePage({ state }, count = 1) {
+  const signedIn = Boolean(state.user);
+  return `<section class="rollers-page" data-roller-count="${signedIn ? 1 : count}">
+    <div class="roller-toolbar"><label for="roller-count">Rollers <select id="roller-count" aria-label="Rollers">${[1, 2, 3].map((value) => `<option value="${value}"${value === (signedIn ? 1 : count) ? " selected" : ""}${signedIn && value > 1 ? " disabled" : ""}>${value} roller${value === 1 ? "" : "s"}</option>`).join("")}</select></label><p>${signedIn ? "Extra rollers are available in guest mode." : "Each roller runs independently."}</p></div>
+    <div class="roller-grid"></div>
+  </section>`;
+}
+export function home({ state }, { auxiliary = false } = {}) {
   const roll = state.today;
   const best = state.leaderboard?.daily?.[0];
   const bestRoll = best?.bestRoll;
@@ -27,7 +34,7 @@ export function home({ state }) {
     <div class="unknown-number" aria-label="Your number is waiting">??????</div>
     <p class="hero-caption">${state.user ? "One roll per day. One number. What will yours be?" : "Roll as often as you like. Find your next lucky number."}</p>
     <button class="generate" data-action="roll" data-testid="roll-button">Generate</button>
-    ${state.user ? "" : `<p class="signup-hint"><a href="/signup" data-link>Sign up</a> before rolling to save your roll and climb the leaderboard</p>`}
+    ${state.user ? "" : auxiliary ? '<p class="signup-hint">Extra guest roller. Accounts save the main roller.</p>' : `<p class="signup-hint"><a href="/signup" data-link>Sign up</a> before rolling to save your roll and climb the leaderboard</p>`}
     <section class="today-best panel"><h2>Today’s best roll</h2>
       ${bestRoll ? rollCard(bestRoll, { compact: true, username: best.username }) : best ? `<a class="best-score" href="/u/${encodeURIComponent(best.username)}" data-link>${e(best.username)}</a><div class="ep-pill">${format(best.bestEP || best.totalEP)} EP</div>` : '<div class="empty-dice" aria-hidden="true">⚄</div><p>No account rolls yet today.</p><p class="muted">Your number could be the first.</p>'}
       <a class="muted" href="/leaderboard" data-link>${format((state.leaderboard?.daily || []).reduce((n, r) => n + r.rolls, 0))} account rolls today →</a>
@@ -37,11 +44,11 @@ export function home({ state }) {
   const scoring = roll.badges.filter((b) => b.isScoring !== false);
   return `<section class="home result">
     <p class="eyebrow">Your roll · ${dateLabel(roll.day)}</p>
-    ${rollCard(roll, { showRarity: true })}
+    ${rollCard(roll, { showRarity: true, rollAgain: !state.user })}
     <div class="result-actions"><button class="button" data-action="replay">↻ Replay reveal</button><button class="button" data-action="share">↗ Share result</button><button class="button" data-action="breakdown">EP breakdown</button></div>
     <p class="muted">${scoring.length} scoring badge${scoring.length === 1 ? "" : "s"} · ${roll.badges.length} badges earned</p>
-    ${state.user ? `<div class="reset-panel panel"><p>Your next number is waiting.</p><strong class="countdown" data-countdown>00:00:00</strong><small>Next roll at midnight UTC</small><button class="button small" data-testid="roll-button" disabled>Rolled for today ✓</button></div>` : `<div class="guest-roll-panel"><button class="generate generate-again" data-action="roll" data-testid="roll-button">Roll again</button><p class="muted">Unlimited guest rolls. Signed-in players get one roll per day.</p></div>`}
-    ${state.user ? `<p class="lifetime">Lifetime <strong>${format(state.stats.totalEP)} EP</strong> · ${state.stats.streak} day streak</p>` : `<p class="signup-hint"><a href="/signup" data-link>Create an account</a> to keep today’s roll and your badge collection.</p>`}
+    ${state.user ? `<div class="reset-panel panel"><p>Your next number is waiting.</p><strong class="countdown" data-countdown>00:00:00</strong><small>Next roll at midnight UTC</small><button class="button small" data-testid="roll-button" disabled>Rolled for today ✓</button></div>` : '<p class="small-note">Unlimited guest rolls. Signed-in players get one roll per day.</p>'}
+    ${state.user ? `<p class="lifetime">Lifetime <strong>${format(state.stats.totalEP)} EP</strong> · ${state.stats.streak} day streak</p>` : auxiliary ? '<p class="signup-hint">Extra guest roller. Accounts save the main roller.</p>' : `<p class="signup-hint"><a href="/signup" data-link>Create an account</a> to keep today’s roll and your badge collection.</p>`}
     <a href="/poetry" class="poetry-link" data-link>✎ Make a poem from your badges</a>
   </section>`;
 }

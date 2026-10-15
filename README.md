@@ -7,11 +7,12 @@ The app uses plain JavaScript, PHP 8.3, and SQLite. There is no JavaScript build
 ## What works
 
 - A server-generated roll from **0 through 1,000,000**, inclusive. Every number is equally likely.
-- One roll per account each UTC day, enforced even across devices and logout/login. Guests have unlimited rolls; only their latest result per UTC day is retained. Signing up saves that latest guest result. Signing in preserves any existing account roll for the day.
+- One roll per account each UTC day, enforced even across devices and logout/login. Guests have unlimited rolls, with a selector for one, two, or three independent rollers. Each keeps its latest result per UTC day. Signing up saves the main roller's latest result. Signing in preserves any existing account roll for the day. Extra rollers are guest-only.
 - All 233 badges, their original predicates, EP, scoring families, and tie order. Every matching badge is earned; only the highest EP badge in each family scores.
 - Original score percentiles and roll rarity, a reset countdown, EP breakdown, and result copying.
 - A slower staged reveal: digits settle from left to right in neutral colors, then the full number pauses and pops in its rarity color. Badge cards include small emojis and descriptions. They arrive from lowest to highest EP, with each new card pushing older ones down. The EP odometer counts only scoring badges. **Replay reveal** replays the same result. Reduced motion shows the result immediately; navigation safely ends the presentation.
 - A prominent rarity-colored percentile line, twice its earlier size, below the rarity word. Lower rolls show “Bottom X%”; higher rolls show “Better than X%”.
+- **Roll again** appears directly below the percentile when the number pops, while badges are still arriving. Rerolling replaces only that roller; the others keep running. On narrow screens, swipe across the rollers.
 - Accounts, sign in/out, verification email, password reset, username/password changes, and account deletion.
 - Persistent history, public profiles, badge collections, badge levels and progress, badge/roll details, favorite badges, and name colors.
 - Today, this week, all-time, and badge leaderboards; total and average EP rankings.
@@ -19,6 +20,8 @@ The app uses plain JavaScript, PHP 8.3, and SQLite. There is no JavaScript build
 - Light/system/dark themes, reduced motion, mobile layouts, and a personal JSON export.
 
 No leaderboard entries or rolls are seeded. A new deployment starts empty.
+
+Use the **Rollers** selector above the game to add or remove panels. History, collection totals, and account signup use the main roller. Extra guest rollers restore their current-day result on reload and have their own badge details, EP breakdown, and poems.
 
 ## Run locally
 
@@ -91,6 +94,7 @@ Record missing or unsupported source badges in **`data/missing-badges.json`**. T
 - `public/index.html` — shell, header, and navigation.
 - `public/css/style.css` — layout, themes, badge colors, and animation.
 - `public/js/app.js` — routing, state, daily rolling, and event handling.
+- `public/js/rollers.js` — independent roller requests, reveals, count selection, and per-roller actions.
 - `public/js/reveal.js` — cancellable digit reels, number pop, ascending badge reveals, and EP odometer. Timing values are next to each reveal step.
 - `public/js/views.js` — game, collection, history, leaderboard, profile, and about views.
 - `public/js/account.js` — account and settings forms.

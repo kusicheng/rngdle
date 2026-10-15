@@ -23,11 +23,21 @@ function application_state(): array
     $history = roll_history($user !== null ? (int) $user['id'] : null, $user === null ? guest_identity() : null);
     $today = gmdate('Y-m-d');
     $todayRoll = isset($history[0]) && $history[0]['day'] === $today ? $history[0] : null;
+    $rollers = ['left' => null, 'right' => null];
+    if ($user === null) {
+        $query = database()->prepare('SELECT * FROM rolls WHERE guest_id = ? AND day = ? AND user_id IS NULL AND claimable = 1');
+        foreach (array_keys($rollers) as $roller) {
+            $query->execute([guest_roller_identity($roller), $today]);
+            $row = $query->fetch();
+            $rollers[$roller] = $row ? hydrate_roll($row) : null;
+        }
+    }
     $leaderboards = leaderboards();
     return [
         'user' => $user !== null ? public_user($user, true) : null,
         'csrf' => $_SESSION['csrf'],
         'today' => $todayRoll,
+        'rollers' => $rollers,
         'stats' => roll_statistics($history),
         'history' => $history,
         'leaderboard' => $leaderboards,
@@ -38,9 +48,13 @@ function application_state(): array
     ];
 }
 
-function perform_roll(): array
+function perform_roll(string $roller = 'center'): array
 {
     $user = current_user();
+    if ($user !== null && $roller !== 'center') {
+        throw new ApiError('Extra rollers are available only while signed out.', 403);
+    }
+    $guestId = $user === null ? guest_roller_identity($roller) : null;
     $db = database();
     // A write lock plus user/day uniqueness protects signed-in daily results.
     $db->exec('BEGIN IMMEDIATE');
@@ -65,11 +79,11 @@ function perform_roll(): array
             // Guests can roll indefinitely. Save only their latest unclaimed roll
             // each day, preserving account history and keeping storage bounded.
             $db->prepare('DELETE FROM rolls WHERE guest_id = ? AND day = ? AND user_id IS NULL AND claimable = 1')
-                ->execute([guest_identity(), $day]);
+                ->execute([$guestId, $day]);
         }
         $query = $db->prepare('INSERT INTO rolls(user_id, guest_id, day, value, ep, badges_json, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)');
         $query->execute([
-            $user !== null ? (int) $user['id'] : null, $user === null ? guest_identity() : null,
+            $user !== null ? (int) $user['id'] : null, $guestId,
             $day, $summary['value'], $summary['totalEP'],
             json_encode($summary['badges'], JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR), $created,
         ]);
@@ -141,7 +155,7 @@ try {
     require_csrf($input);
     switch ($action) {
         case 'roll':
-            respond(perform_roll());
+            respond(perform_roll(requested_roller($input)));
 
         case 'register':
             limit_requests('register', 5, 3600);
@@ -287,6 +301,10 @@ try {
 
         case 'savePoem':
             $user = current_user();
+            $roller = requested_roller($input);
+            if ($user !== null && $roller !== 'center') {
+                throw new ApiError('Extra rollers are available only while signed out.', 403);
+            }
             $rollId = $input['rollId'] ?? null;
             $text = $input['text'] ?? null;
             if (!is_int($rollId) || $rollId < 1 || !is_string($text)) {
@@ -301,7 +319,8 @@ try {
             $roll = $query->fetch();
             $owned = $roll && ($user !== null
                 ? (int) $roll['user_id'] === (int) $user['id']
-                : $roll['user_id'] === null && $roll['guest_id'] === guest_identity() && $roll['day'] === gmdate('Y-m-d'));
+                : $roll['user_id'] === null && (int) $roll['claimable'] === 1 &&
+                    $roll['guest_id'] === guest_roller_identity($roller) && $roll['day'] === gmdate('Y-m-d'));
             if (!$owned) {
                 throw new ApiError('You can save a poem only on your own roll.', 403);
             }
